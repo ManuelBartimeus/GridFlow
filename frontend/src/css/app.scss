@@ -1,0 +1,35 @@
+// app global css in SCSS form
+
+// Apply Montserrat font globally
+* {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+}
+
+// Global rounded borders for modern feel
+.q-card {
+  border-radius: 12px !important;
+}
+
+.q-btn {
+  border-radius: 8px !important;
+}
+
+.q-input .q-field__control {
+  border-radius: 8px !important;
+}
+
+.q-select .q-field__control {
+  border-radius: 8px !important;
+}
+
+.q-badge {
+  border-radius: 6px !important;
+}
+
+.q-table {
+  border-radius: 12px !important;
+}
+
+.q-avatar {
+  border-radius: 10px !important;
+}
