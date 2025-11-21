@@ -2,7 +2,7 @@
   <q-page class="projects-page">
     <div class="container">
       <!-- Filters Bar -->
-      <div class="filters-bar row items-center justify-between q-px-md q-py-md">
+      <div class="filters-bar row items-center justify-between q-px-md q-py-sm bg-grey-2">
         <div class="row items-center q-gutter-sm">
           <q-select
             outlined
@@ -147,340 +147,21 @@
     </div>
 
     <!-- Project Details Dialog -->
-    <q-dialog v-model="showDetailsDialog">
-      <q-card class="project-details-card" style="width: 90vw; max-width: 1400px; height: 90vh;">
-        <q-card-section class="project-details-header row items-center q-pa-md">
-          <div class="col">
-            <div class="project-details-title">{{ selectedProject?.title }}</div>
-            <div class="project-details-dates">{{ selectedProject?.startDate }} → {{ selectedProject?.endDate }}</div>
-          </div>
-          <q-btn flat round dense icon="close" @click="showDetailsDialog = false" />
-        </q-card-section>
-
-        <q-separator />
-
-        <q-card-section class="project-details-content">
-          <div class="details-grid">
-            <!-- Left Column -->
-            <div class="details-left-column">
-              <!-- Timeline & Tasks -->
-              <div class="details-section">
-                <div class="section-title">
-                  <q-icon name="timeline" color="blue-7" size="20px" class="q-mr-sm" />
-                  Timeline & Tasks
-                </div>
-                <!-- Gantt Chart -->
-                <div v-if="!selectedProject?.tasks || selectedProject.tasks.length === 0" class="gantt-chart-empty">
-                  <div class="gantt-timeline-header">
-                    <div class="gantt-project-dates">
-                      <span class="gantt-start-date">{{ selectedProject?.startDate }}</span>
-                      <span class="gantt-date-separator">—</span>
-                      <span class="gantt-end-date">{{ selectedProject?.endDate }}</span>
-                    </div>
-                  </div>
-                  <div class="gantt-empty-state">
-                    <q-icon name="calendar_today" size="48px" color="grey-5" />
-                    <div class="gantt-empty-text">No timeline milestones added yet</div>
-                    <div class="gantt-empty-subtext">Add tasks to visualize project timeline</div>
-                  </div>
-                </div>
-
-                <!-- Gantt Chart with Tasks -->
-                <div v-else class="gantt-chart-container">
-                  <div class="gantt-timeline-header">
-                    <div class="gantt-project-dates">
-                      <span class="gantt-start-date">{{ selectedProject?.startDate }}</span>
-                      <span class="gantt-date-separator">—</span>
-                      <span class="gantt-end-date">{{ selectedProject?.endDate }}</span>
-                    </div>
-                  </div>
-                  
-                  <div class="gantt-chart">
-                    <!-- Month Labels -->
-                    <div class="gantt-timeline">
-                      <div class="gantt-timeline-label">Timeline</div>
-                      <div class="gantt-timeline-months">
-                        <div class="gantt-month" v-for="month in selectedProject?.ganttMonths" :key="month">{{ month }}</div>
-                      </div>
-                    </div>
-
-                    <!-- Task Rows -->
-                    <div class="gantt-task-row" v-for="task in selectedProject?.tasks" :key="task.name">
-                      <div class="gantt-task-label">
-                        <div class="gantt-task-name">{{ task.name }}</div>
-                        <div class="gantt-task-dates">{{ task.dates }}</div>
-                      </div>
-                      <div class="gantt-task-timeline">
-                        <div class="gantt-task-bar-container">
-                          <div 
-                            class="gantt-task-bar" 
-                            :style="{
-                              left: task.ganttStart + '%',
-                              width: task.ganttWidth + '%',
-                              backgroundColor: task.ganttColor
-                            }"
-                          >
-                            <span class="gantt-task-duration">{{ task.ganttDuration }}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Timeline Stats -->
-                <div class="timeline-stats row q-gutter-md q-mt-md">
-                  <div class="stat-item">
-                    <div class="stat-label">Resolved Time</div>
-                    <div class="stat-value">12 Weeks</div>
-                  </div>
-                  <div class="stat-item">
-                    <div class="stat-label">Actual Logged Time</div>
-                    <div class="stat-value">7 Weeks, 3 Days</div>
-                  </div>
-                  <div class="stat-item">
-                    <div class="stat-label">Time Left</div>
-                    <div class="stat-value">4 Weeks, 5 Days</div>
-                  </div>
-                </div>
-
-                <!-- Task List -->
-                <div class="task-list q-mt-md">
-                  <div class="task-header row items-center q-py-sm">
-                    <div class="col-4 text-weight-medium">TASK NAME</div>
-                    <div class="col-3 text-weight-medium">DATES</div>
-                    <div class="col-3 text-weight-medium">ASSIGNED</div>
-                    <div class="col-2 text-weight-medium">STATUS</div>
-                  </div>
-                  <div class="task-row row items-center q-py-sm" v-for="task in selectedProject?.tasks" :key="task.name">
-                    <div class="col-4">{{ task.name }}</div>
-                    <div class="col-3 text-grey-7">{{ task.dates }}</div>
-                    <div class="col-3 text-grey-7">{{ task.assigned }}</div>
-                    <div class="col-2">
-                      <q-badge :color="task.statusColor" :text-color="task.statusTextColor" :label="task.status" class="status-badge" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Financials -->
-              <div class="details-section q-mt-md">
-                <div class="section-title">
-                  <q-icon name="payments" color="green-7" size="20px" class="q-mr-sm" />
-                  Financials
-                </div>
-                <div class="financial-stats row q-gutter-md">
-                  <div class="financial-item">
-                    <div class="financial-label">Allocated Budget</div>
-                    <div class="financial-value">$250,000</div>
-                  </div>
-                  <div class="financial-item">
-                    <div class="financial-label">Expenditure</div>
-                    <div class="financial-value">$112,500</div>
-                  </div>
-                  <div class="financial-item">
-                    <div class="financial-label">Remaining</div>
-                    <div class="financial-value">$137,500</div>
-                  </div>
-                  <div class="financial-item">
-                    <div class="financial-label">Burn Rate</div>
-                    <div class="financial-value text-red-8">45%</div>
-                  </div>
-                </div>
-
-                <!-- Entry List -->
-                <div class="entry-list q-mt-md">
-                  <div class="entry-header row items-center q-py-sm">
-                    <div class="col-6 text-weight-medium">ENTRY</div>
-                    <div class="col-3 text-weight-medium">AMOUNT</div>
-                    <div class="col-3 text-weight-medium">DATE</div>
-                  </div>
-                  <div class="entry-row row items-center q-py-sm" v-for="entry in sampleEntries" :key="entry.name">
-                    <div class="col-6">{{ entry.name }}</div>
-                    <div class="col-3 text-grey-7">{{ entry.amount }}</div>
-                    <div class="col-3 text-grey-7">{{ entry.date }}</div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Project Linkages -->
-              <div class="details-section q-mt-md">
-                <div class="section-title">
-                  <q-icon name="account_tree" color="purple-7" size="20px" class="q-mr-sm" />
-                  Project Linkages
-                </div>
-
-                <!-- Linkage List -->
-                <div class="linkage-list q-mt-md">
-                  <div class="linkage-header row items-center q-py-sm">
-                    <div class="col-4 text-weight-medium">NAME</div>
-                    <div class="col-4 text-weight-medium">RELATIONSHIP</div>
-                    <div class="col-2 text-weight-medium">STATUS</div>
-                    <div class="col-2 text-weight-medium">OWNER</div>
-                  </div>
-                  <div class="linkage-row row items-center q-py-sm" v-for="link in sampleLinkages" :key="link.name">
-                    <div class="col-4">{{ link.name }}</div>
-                    <div class="col-4 text-grey-7">{{ link.relationship }}</div>
-                    <div class="col-2">
-                      <q-badge :color="link.statusColor" :text-color="link.statusTextColor" :label="link.status" class="status-badge" />
-                    </div>
-                    <div class="col-2 text-grey-7">{{ link.owner }}</div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Documents & Files -->
-              <div class="details-section q-mt-md">
-                <div class="section-title">
-                  <q-icon name="folder_open" color="orange-7" size="20px" class="q-mr-sm" />
-                  Documents & Files
-                </div>
-                <div class="row items-center q-mb-md">
-                  <q-input 
-                    outlined 
-                    dense 
-                    placeholder="Search files..." 
-                    class="col-grow q-mr-sm"
-                    bg-color="white"
-                  >
-                    <template v-slot:prepend>
-                      <q-icon name="search" size="18px" />
-                    </template>
-                  </q-input>
-                  <q-btn outline dense label="Filters" icon="filter_list" color="grey-7" />
-                </div>
-
-                <div class="files-grid row q-gutter-md">
-                  <div class="file-card" v-for="file in sampleFiles" :key="file.name">
-                    <q-icon :name="file.icon" size="32px" color="primary" />
-                    <div class="file-name q-mt-sm">{{ file.name }}</div>
-                    <div class="file-size text-grey-7">{{ file.size }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right Column -->
-            <div class="details-right-column">
-              <!-- Project Status -->
-              <div class="details-section">
-                <div class="section-title">
-                  <q-icon name="flag" color="red-7" size="20px" class="q-mr-sm" />
-                  Project Status
-                </div>
-                <div class="status-item q-mb-sm">
-                  <div class="status-label">Current Status</div>
-                  <q-badge color="blue-1" text-color="blue-8" label="In Progress" class="status-badge-large" />
-                </div>
-                <div class="status-item">
-                  <div class="status-label">Health</div>
-                  <q-badge color="orange-1" text-color="orange-8" label="At Risk" class="status-badge-large" />
-                </div>
-              </div>
-
-              <!-- Progress Completion -->
-              <div class="details-section q-mt-md">
-                <div class="section-title">
-                  <q-icon name="show_chart" color="teal-7" size="20px" class="q-mr-sm" />
-                  Progress Completion
-                </div>
-                <div class="progress-percentage">{{ selectedProject?.progress }}%</div>
-                <q-linear-progress
-                  :value="(selectedProject?.progress || 0) / 100"
-                  color="primary"
-                  track-color="grey-3"
-                  size="12px"
-                  class="progress-bar-large"
-                />
-              </div>
-
-              <!-- Description & Strategic Context -->
-              <div class="details-section q-mt-md">
-                <div class="section-title">
-                  <q-icon name="description" color="indigo-7" size="20px" class="q-mr-sm" />
-                  Description & Strategic Context
-                </div>
-                <div class="description-text">
-                  This section contains the full project description, outlining the primary objectives, scope summary,
-                  and key constraints and assumptions. The content is designed to provide a comprehensive
-                  understanding of the project's strategic importance and its intended outcomes,
-                  ensuring all stakeholders are aligned. It details the business case, success criteria, and how this
-                  initiative ties into the broader organizational goals for the quarter.
-                </div>
-              </div>
-
-              <!-- Project Data -->
-              <div class="details-section q-mt-md">
-                <div class="section-title">
-                  <q-icon name="data_usage" color="cyan-7" size="20px" class="q-mr-sm" />
-                  Project Data
-                </div>
-                <div class="data-item">
-                  <div class="data-label">Priority</div>
-                  <q-badge color="red-1" text-color="red-8" label="High Priority" class="status-badge-large" />
-                </div>
-                <div class="data-item">
-                  <div class="data-label">Department</div>
-                  <div class="data-value">{{ selectedProject?.tags[0] || 'Engineering' }}</div>
-                </div>
-                <div class="data-item">
-                  <div class="data-label">Section</div>
-                  <div class="data-value">{{ selectedProject?.tags[1] || 'Mechanical' }}</div>
-                </div>
-                <div class="data-item">
-                  <div class="data-label">Unit</div>
-                  <div class="data-value">{{ selectedProject?.tags[2] || 'Automotive' }}</div>
-                </div>
-                <div class="data-item">
-                  <div class="data-label">Project Type</div>
-                  <div class="data-value">Linked</div>
-                </div>
-              </div>
-
-              <!-- Project Roles -->
-              <div class="details-section q-mt-md">
-                <div class="section-title">
-                  <q-icon name="groups" color="pink-7" size="20px" class="q-mr-sm" />
-                  Project Roles
-                </div>
-                <div class="role-item" v-for="role in sampleRoles" :key="role.title">
-                  <div class="role-title">{{ role.title }}</div>
-                  <div class="role-name">{{ role.name }}</div>
-                </div>
-              </div>
-
-              <!-- Project Tickets -->
-              <div class="details-section q-mt-md">
-                <div class="section-title">
-                  <q-icon name="confirmation_number" color="amber-7" size="20px" class="q-mr-sm" />
-                  Project Tickets
-                </div>
-                <div class="ticket-list">
-                  <div class="ticket-header row items-center q-py-sm">
-                    <div class="col-5 text-weight-medium">TICKET NAME</div>
-                    <div class="col-4 text-weight-medium">STATUS</div>
-                    <div class="col-3 text-weight-medium">FROM</div>
-                  </div>
-                  <div class="ticket-row row items-center q-py-sm" v-for="ticket in sampleTickets" :key="ticket.name">
-                    <div class="col-5 text-primary">{{ ticket.name }}</div>
-                    <div class="col-4">
-                      <q-badge :color="ticket.statusColor" :text-color="ticket.statusTextColor" :label="ticket.status" class="status-badge" />
-                    </div>
-                    <div class="col-3 text-grey-7">{{ ticket.from }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+    <ProjectDetailsDialog 
+      v-model="showDetailsDialog" 
+      :project="selectedProject" 
+    />
   </q-page>
 </template>
 
 <script>
+import ProjectDetailsDialog from 'src/components/ProjectDetailsDialog.vue'
+
 export default {
   name: 'ProjectsPage',
+  components: {
+    ProjectDetailsDialog
+  },
   data() {
     return {
       showDetailsDialog: false,
@@ -866,30 +547,6 @@ export default {
           ],
           ganttMonths: ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
         }
-      ],
-      sampleEntries: [
-        { name: 'Software Licensing', amount: '$25,000', date: 'Jul 2, 2024' },
-        { name: 'Software Licensing', amount: '$25,000', date: 'Jul 3, 2024' }
-      ],
-      sampleLinkages: [
-        { name: 'Global Initiative 2024', relationship: 'Parent', status: 'In-Progress', statusColor: 'blue-1', statusTextColor: 'blue-8', owner: 'Jamie Doe' },
-        { name: 'Data Migration Task', relationship: 'Dependency', status: 'On-Hold', statusColor: 'orange-1', statusTextColor: 'orange-8', owner: 'John Smith' }
-      ],
-      sampleFiles: [
-        { name: 'Project_Charter.pdf', size: '2.3 MB', icon: 'description' },
-        { name: 'Invoices', size: '14 files', icon: 'folder' },
-        { name: 'Q2_Report.docx', size: '856 KB', icon: 'description' }
-      ],
-      sampleRoles: [
-        { title: 'Project Owner', name: 'Jane Rosling' },
-        { title: 'Project Sponsor', name: '--' },
-        { title: 'Project Manager', name: 'Jane Rosling' },
-        { title: 'Team Lead', name: 'Jane Rosling' }
-      ],
-      sampleTickets: [
-        { name: 'Budget Review Meeting', status: 'Approved', statusColor: 'green-1', statusTextColor: 'green-8', from: 'Alex Johnson' },
-        { name: 'Project Deadline Change', status: 'Pending', statusColor: 'orange-1', statusTextColor: 'orange-8', from: 'Samantha Lee' },
-        { name: 'New Budget Approval', status: 'Declined', statusColor: 'red-1', statusTextColor: 'red-8', from: 'Michael Chen' }
       ]
     }
   },
@@ -904,7 +561,7 @@ export default {
 
 <style scoped>
 .projects-page {
-  background: #f3f4f6;
+  background: #f5f7fa;
   min-height: 100vh;
 }
 
@@ -914,7 +571,6 @@ export default {
 
 /* Filters Bar */
 .filters-bar {
-  background: #f9fafb;
   border-bottom: 1px solid #e5e7eb;
   gap: 8px;
 }

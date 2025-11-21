@@ -2,7 +2,7 @@
   <q-page class="approvals-page">
     <div class="page-container">
       <!-- Filters Section -->
-      <div class="filters-bar row items-center justify-between q-mb-lg">
+      <div class="filters-bar row items-center justify-between q-px-md q-py-sm bg-grey-2">
         <div class="row items-center q-gutter-sm">
           <q-select
             outlined
@@ -73,63 +73,43 @@
       </div>
 
       <!-- Stats Cards -->
-      <div class="stats-row row q-gutter-md q-mb-lg">
-        <div class="stat-card">
-          <div class="stat-icon-container blue-icon">
-            <q-icon name="description" size="20px" color="primary" />
+      <div class="kpi-section q-px-md q-py-md">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">New</div>
+            <div class="kpi-value">128</div>
           </div>
-          <div class="stat-content">
-            <div class="stat-value">128</div>
-            <div class="stat-label">New</div>
-          </div>
-        </div>
 
-        <div class="stat-card">
-          <div class="stat-icon-container yellow-icon">
-            <q-icon name="account_balance_wallet" size="20px" color="warning" />
+          <div class="kpi-card">
+            <div class="kpi-label">Budget Request</div>
+            <div class="kpi-value">12</div>
           </div>
-          <div class="stat-content">
-            <div class="stat-value">12</div>
-            <div class="stat-label">Budget Request</div>
-          </div>
-        </div>
 
-        <div class="stat-card">
-          <div class="stat-icon-container orange-icon">
-            <q-icon name="event" size="20px" color="orange" />
+          <div class="kpi-card">
+            <div class="kpi-label">Timeline Request</div>
+            <div class="kpi-value">21</div>
           </div>
-          <div class="stat-content">
-            <div class="stat-value">21</div>
-            <div class="stat-label">Timeline Request</div>
-          </div>
-        </div>
 
-        <div class="stat-card">
-          <div class="stat-icon-container green-icon">
-            <q-icon name="check_circle" size="20px" color="positive" />
+          <div class="kpi-card">
+            <div class="kpi-label">Completed (Month)</div>
+            <div class="kpi-value">345</div>
           </div>
-          <div class="stat-content">
-            <div class="stat-value">345</div>
-            <div class="stat-label">Completed (Month)</div>
-          </div>
-        </div>
 
-        <div class="stat-card">
-          <div class="stat-icon-container red-icon">
-            <q-icon name="cancel" size="20px" color="negative" />
-          </div>
-          <div class="stat-content">
-            <div class="stat-value">8</div>
-            <div class="stat-label">Rejected (Month)</div>
+          <div class="kpi-card">
+            <div class="kpi-label">Rejected (Month)</div>
+            <div class="kpi-value">8</div>
           </div>
         </div>
       </div>
 
-      <!-- Approval Workload Distribution Chart -->
-      <div class="chart-section q-mb-lg">
-        <div class="section-title">Approval Workload Distribution</div>
-        <div class="chart-container">
-          <div class="chart-bars">
+      <!-- Content Grid -->
+      <div class="content-grid q-px-md">
+        <!-- Approval Workload Distribution Chart -->
+        <q-card flat bordered class="q-mb-md">
+          <q-card-section>
+            <div class="section-title">Approval Workload Distribution</div>
+            <div class="chart-container">
+              <div class="chart-bars">
             <div v-for="week in weeklyData" :key="week.week" class="bar-group">
               <div class="bars-container">
                 <div 
@@ -168,11 +148,13 @@
               <span>Rejected</span>
             </div>
           </div>
-        </div>
-      </div>
+            </div>
+          </q-card-section>
+        </q-card>
 
-      <!-- Approval Queue Table -->
-      <div class="queue-section q-mb-lg">
+        <!-- Approval Queue Table -->
+        <q-card flat bordered class="q-mb-md">
+          <q-card-section>
         <div class="section-title q-mb-md">Approval Queue</div>
         <q-table
           flat
@@ -224,63 +206,73 @@
           </template>
         </q-table>
 
-        <div class="table-footer row items-center justify-between q-mt-sm">
-          <div class="text-caption text-grey-7">Showing 1 to 3 of 128 results</div>
-          <div class="row items-center q-gutter-xs">
-            <q-btn flat dense icon="chevron_left" size="sm" />
-            <span class="text-caption text-grey-7">1 / 43</span>
-            <q-btn flat dense icon="chevron_right" size="sm" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom Section with Escalations and Recent Activity -->
-      <div class="row q-gutter-md">
-        <!-- Escalations & Breaches -->
-        <div class="col escalations-section">
-          <div class="section-title q-mb-md">Escalations & Breaches</div>
-          <q-table
-            flat
-            :rows="escalationRows"
-            :columns="escalationColumns"
-            row-key="id"
-            hide-pagination
-            class="escalation-table"
-          >
-            <template v-slot:body-cell-type="props">
-              <q-td :props="props">
-                <span class="type-link">{{ props.value }}</span>
-              </q-td>
-            </template>
-
-            <template v-slot:body-cell-severity="props">
-              <q-td :props="props">
-                <q-badge
-                  :color="getSeverityColor(props.value)"
-                  :label="props.value"
-                  class="severity-badge"
-                />
-              </q-td>
-            </template>
-          </q-table>
-        </div>
-
-        <!-- Recent Activity -->
-        <div class="col-4 activity-section">
-          <div class="section-title q-mb-md">Recent Activity</div>
-          <div class="activity-list">
-            <div v-for="activity in recentActivities" :key="activity.id" class="activity-item">
-              <q-icon
-                :name="activity.icon"
-                :color="activity.iconColor"
-                size="18px"
-                class="activity-icon"
-              />
-              <div class="activity-content">
-                <div class="activity-text">{{ activity.text }}</div>
-                <div class="activity-time">{{ activity.time }}</div>
+            <div class="table-footer row items-center justify-between q-mt-sm">
+              <div class="text-caption text-grey-7">Showing 1 to 3 of 128 results</div>
+              <div class="row items-center q-gutter-xs">
+                <q-btn flat dense icon="chevron_left" size="sm" />
+                <span class="text-caption text-grey-7">1 / 43</span>
+                <q-btn flat dense icon="chevron_right" size="sm" />
               </div>
             </div>
+          </q-card-section>
+        </q-card>
+
+        <!-- Bottom Section with Escalations and Recent Activity -->
+        <div class="row q-col-gutter-md">
+          <!-- Escalations & Breaches -->
+          <div class="col">
+            <q-card flat bordered class="full-height">
+              <q-card-section>
+                <div class="section-title q-mb-md">Escalations & Breaches</div>
+                <q-table
+                  flat
+                  :rows="escalationRows"
+                  :columns="escalationColumns"
+                  row-key="id"
+                  hide-pagination
+                  class="escalation-table"
+                >
+                  <template v-slot:body-cell-type="props">
+                    <q-td :props="props">
+                      <span class="type-link">{{ props.value }}</span>
+                    </q-td>
+                  </template>
+
+                  <template v-slot:body-cell-severity="props">
+                    <q-td :props="props">
+                      <q-badge
+                        :color="getSeverityColor(props.value)"
+                        :label="props.value"
+                        class="severity-badge"
+                      />
+                    </q-td>
+                  </template>
+                </q-table>
+              </q-card-section>
+            </q-card>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="col-4">
+            <q-card flat bordered class="full-height">
+              <q-card-section>
+                <div class="section-title q-mb-md">Recent Activity</div>
+                <div class="activity-list">
+                  <div v-for="activity in recentActivities" :key="activity.id" class="activity-item">
+                    <q-icon
+                      :name="activity.icon"
+                      :color="activity.iconColor"
+                      size="18px"
+                      class="activity-icon"
+                    />
+                    <div class="activity-content">
+                      <div class="activity-text">{{ activity.text }}</div>
+                      <div class="activity-time">{{ activity.time }}</div>
+                    </div>
+                  </div>
+                </div>
+              </q-card-section>
+            </q-card>
           </div>
         </div>
       </div>
@@ -454,21 +446,18 @@ export default {
 
 <style scoped>
 .approvals-page {
-  background: #f3f4f6;
+  background: #f5f7fa;
   min-height: 100vh;
   font-family: 'Montserrat', sans-serif;
 }
 
 .page-container {
   max-width: 100%;
-  padding: 0;
 }
 
 /* Filters Bar */
 .filters-bar {
-  background: #f9fafb;
   border-bottom: 1px solid #e5e7eb;
-  padding: 12px 16px;
   gap: 8px;
 }
 
@@ -498,91 +487,47 @@ export default {
   color: #6b7280;
 }
 
-/* Stats Cards */
-.stats-row {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0 24px;
-  margin-top: 24px;
-  margin-bottom: 24px;
+/* KPI Section */
+.kpi-section {
+  background: transparent;
 }
 
-.stat-card {
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+.kpi-card {
   background: white;
+  padding: 20px;
   border-radius: 16px;
   border: 1px solid #e5e7eb;
-  padding: 24px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex: 1;
-  min-width: 180px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.2s;
 }
 
-.stat-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.kpi-label {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 8px;
+  font-family: 'Montserrat', sans-serif;
 }
 
-.stat-icon-container {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.blue-icon {
-  background: #dbeafe;
-}
-
-.yellow-icon {
-  background: #fef3c7;
-}
-
-.orange-icon {
-  background: #fed7aa;
-}
-
-.red-icon {
-  background: #fee2e2;
-}
-
-.green-icon {
-  background: #d1fae5;
-}
-
-.stat-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.stat-value {
+.kpi-value {
   font-size: 28px;
   font-weight: 700;
   color: #1f2937;
-  line-height: 1;
   margin-bottom: 4px;
   font-family: 'Montserrat', sans-serif;
 }
 
-.stat-label {
-  font-size: 12px;
-  color: #6b7280;
-  font-weight: 500;
-  font-family: 'Montserrat', sans-serif;
+/* Content Grid */
+.content-grid {
+  padding-bottom: 24px;
 }
 
-/* Chart Section */
-.chart-section {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  margin: 0 24px 24px 24px;
+.content-grid :deep(.q-card) {
+  border-radius: 16px !important;
 }
 
 .section-title {
@@ -590,9 +535,6 @@ export default {
   font-weight: 600;
   color: #1f2937;
   font-family: 'Montserrat', sans-serif;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
 }
 
 .chart-container {
@@ -713,56 +655,52 @@ export default {
   font-family: 'Montserrat', sans-serif;
 }
 
-/* Queue Section */
-.queue-section {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  margin: 0 24px 24px 24px;
-}
-
+/* Tables */
 .approval-table {
+  background: transparent;
   box-shadow: none;
 }
 
-.approval-table :deep(thead) {
-  background: #f9fafb;
-}
-
-.approval-table :deep(th) {
+.approval-table :deep(thead th) {
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   color: #6b7280;
-  font-family: 'Montserrat', sans-serif;
-  text-transform: none;
   padding: 12px 16px;
+  background: #f9fafb;
+  font-family: 'Montserrat', sans-serif;
 }
 
-.approval-table :deep(td) {
-  font-size: 13px;
-  padding: 14px 16px;
-  color: #374151;
+.approval-table :deep(tbody td) {
+  padding: 16px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
   font-family: 'Montserrat', sans-serif;
 }
 
 .department-link {
   color: #3b82f6;
-  cursor: pointer;
+  text-decoration: none;
   font-weight: 500;
   font-family: 'Montserrat', sans-serif;
 }
 
+.department-link:hover {
+  text-decoration: underline;
+}
+
 .assigned-link {
   color: #3b82f6;
-  cursor: pointer;
+  text-decoration: none;
   font-family: 'Montserrat', sans-serif;
+}
+
+.assigned-link:hover {
+  text-decoration: underline;
 }
 
 .status-badge {
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 11px;
   font-weight: 500;
   font-family: 'Montserrat', sans-serif;
@@ -773,95 +711,90 @@ export default {
   font-family: 'Montserrat', sans-serif;
 }
 
-/* Escalations Section */
-.escalations-section {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  margin-left: 24px;
-}
-
 .escalation-table {
+  background: transparent;
   box-shadow: none;
 }
 
-.escalation-table :deep(thead) {
-  background: #f9fafb;
-}
-
-.escalation-table :deep(th) {
+.escalation-table :deep(thead th) {
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   color: #6b7280;
-  font-family: 'Montserrat', sans-serif;
-  text-transform: none;
   padding: 12px 16px;
+  background: #f9fafb;
+  font-family: 'Montserrat', sans-serif;
 }
 
-.escalation-table :deep(td) {
-  font-size: 13px;
-  padding: 14px 16px;
-  color: #374151;
+.escalation-table :deep(tbody td) {
+  padding: 16px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
   font-family: 'Montserrat', sans-serif;
 }
 
 .type-link {
   color: #3b82f6;
-  cursor: pointer;
+  text-decoration: none;
   font-family: 'Montserrat', sans-serif;
+}
+
+.type-link:hover {
+  text-decoration: underline;
 }
 
 .severity-badge {
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 11px;
   font-weight: 500;
   font-family: 'Montserrat', sans-serif;
 }
 
-/* Activity Section */
-.activity-section {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  margin-right: 24px;
-}
-
 .activity-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .activity-item {
   display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.activity-icon {
-  margin-top: 2px;
-}
-
-.activity-content {
-  flex: 1;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .activity-text {
-  font-size: 13px;
-  color: #374151;
+  font-size: 14px;
+  color: #4b5563;
   font-family: 'Montserrat', sans-serif;
-  line-height: 1.5;
-  margin-bottom: 4px;
 }
 
 .activity-time {
-  font-size: 11px;
+  font-size: 12px;
   color: #9ca3af;
   font-family: 'Montserrat', sans-serif;
+}
+
+/* Badges and Buttons */
+:deep(.q-badge) {
+  border-radius: 8px !important;
+  font-family: 'Montserrat', sans-serif;
+}
+
+:deep(.q-btn) {
+  border-radius: 10px !important;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .kpi-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>
