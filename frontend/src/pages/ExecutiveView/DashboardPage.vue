@@ -1,41 +1,6 @@
 <template>
   <q-page class="dashboard-page">
     <div class="container">
-      <!-- Header -->
-      <div class="header row items-center justify-between q-px-md q-py-sm">
-        <div class="logo-section row items-center no-wrap">
-          <q-icon name="apps" size="28px" color="primary" class="q-mr-sm" />
-          <div class="brand-text">
-            <div class="brand-title">GRIDFlow</div>
-          </div>
-          <div class="nav-links row items-center q-ml-lg">
-            <a href="#" class="nav-link active">Dashboard</a>
-            <a href="#" class="nav-link">Projects</a>
-            <a href="#" class="nav-link">Approvals</a>
-          </div>
-        </div>
-
-        <div class="header-actions row items-center q-gutter-sm">
-          <q-input 
-            dense 
-            outlined 
-            debounce="300" 
-            v-model="search" 
-            placeholder="Global Search..." 
-            class="search-input"
-            bg-color="white"
-          >
-            <template v-slot:prepend>
-              <q-icon name="search" size="18px" />
-            </template>
-          </q-input>
-          <div class="text-caption text-grey-7">Last Updated: 1 min ago</div>
-          <q-btn flat round dense icon="wb_sunny" size="sm" />
-          <q-btn flat round dense icon="dark_mode" size="sm" />
-          <q-btn flat round dense icon="person" size="sm" />
-        </div>
-      </div>
-
       <!-- Filters Bar -->
       <div class="filters-bar row items-center q-px-md q-py-sm bg-grey-2">
         <q-select 
@@ -473,12 +438,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Footer -->
-      <div class="footer q-pa-md text-center">
-        <span class="footer-text">© 2025 GRIDCo — Project Management System | v1.2.0 | API Status </span>
-        <q-badge color="positive" label="Online" />
-      </div>
     </div>
   </q-page>
 </template>
@@ -794,58 +753,6 @@ export default {
 
 .container {
   max-width: 100%;
-}
-
-/* Header */
-.header {
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
-  border-radius: 0;
-}
-
-.logo-section {
-  gap: 8px;
-}
-
-.brand-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1f2937;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.nav-links {
-  gap: 24px;
-}
-
-.nav-link {
-  color: #6b7280;
-  text-decoration: none;
-  font-size: 14px;
-  padding: 4px 8px;
-  transition: color 0.2s;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.nav-link.active {
-  color: #3b82f6;
-  font-weight: 500;
-}
-
-.nav-link:hover {
-  color: #3b82f6;
-}
-
-.header-actions {
-  gap: 12px;
-}
-
-.search-input {
-  width: 240px;
-}
-
-.search-input :deep(.q-field__control) {
-  border-radius: 10px !important;
 }
 
 /* Filters Bar */
@@ -1381,20 +1288,6 @@ export default {
   font-family: 'Montserrat', sans-serif;
 }
 
-/* Footer */
-.footer {
-  background: white;
-  border-top: 1px solid #e5e7eb;
-  margin-top: 24px;
-  border-radius: 0;
-}
-
-.footer-text {
-  font-size: 12px;
-  color: #6b7280;
-  font-family: 'Montserrat', sans-serif;
-}
-
 /* Badges with rounded corners */
 :deep(.q-badge) {
   border-radius: 8px !important;
@@ -1417,10 +1310,6 @@ export default {
 @media (max-width: 768px) {
   .kpi-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .search-input {
-    width: 160px;
   }
 }
 </style>
