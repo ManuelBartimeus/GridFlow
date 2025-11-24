@@ -2,72 +2,53 @@
   <q-page class="approvals-page">
     <div class="page-container">
       <!-- Filters Section -->
-      <div class="filters-bar row items-center justify-between q-px-md q-py-sm bg-grey-2">
-        <div class="row items-center q-gutter-sm">
-          <q-select
-            outlined
-            dense
-            v-model="priorityLevel"
-            label="Priority Level"
-            :options="priorityOptions"
-            class="filter-select"
-            bg-color="white"
-          >
-            <template v-slot:append>
-              <q-icon name="keyboard_arrow_down" />
-            </template>
-          </q-select>
+      <div class="filters-bar row items-center q-px-md q-py-md bg-white">
+        <div class="page-title">Approvals</div>
+        <q-space />
+        
+        <q-chip clickable class="filter-chip">
+          <span class="filter-label">Priority</span>
+          <span class="filter-separator">|</span>
+          <span class="filter-value">{{ priorityLevel }}</span>
+          <q-menu>
+            <q-list style="min-width: 150px">
+              <q-item clickable v-close-popup v-for="option in priorityOptions" :key="option" @click="priorityLevel = option">
+                <q-item-section>{{ option }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-chip>
 
-          <q-select
-            outlined
-            dense
-            v-model="role"
-            label="Role"
-            :options="roleOptions"
-            class="filter-select"
-            bg-color="white"
-          >
-            <template v-slot:append>
-              <q-icon name="keyboard_arrow_down" />
-            </template>
-          </q-select>
+        <q-chip clickable class="filter-chip">
+          <span class="filter-label">Role</span>
+          <span class="filter-separator">|</span>
+          <span class="filter-value">{{ role }}</span>
+          <q-menu>
+            <q-list style="min-width: 150px">
+              <q-item clickable v-close-popup v-for="option in roleOptions" :key="option" @click="role = option">
+                <q-item-section>{{ option }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-chip>
 
-          <q-select
-            outlined
-            dense
-            v-model="projectType"
-            label="Project Type"
-            :options="projectTypeOptions"
-            class="filter-select"
-            bg-color="white"
-          >
-            <template v-slot:append>
-              <q-icon name="keyboard_arrow_down" />
-            </template>
-          </q-select>
+        <q-chip clickable class="filter-chip">
+          <span class="filter-label">Project Type</span>
+          <span class="filter-separator">|</span>
+          <span class="filter-value">{{ projectType }}</span>
+          <q-menu>
+            <q-list style="min-width: 150px">
+              <q-item clickable v-close-popup v-for="option in projectTypeOptions" :key="option" @click="projectType = option">
+                <q-item-section>{{ option }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-chip>
 
-          <q-btn
-            outline
-            dense
-            label="Date Filter"
-            icon="calendar_today"
-            class="date-filter-btn"
-          />
-        </div>
-
-        <div class="row items-center q-gutter-sm">
-          <q-btn
-            label="Apply Filters"
-            color="primary"
-            unelevated
-            class="apply-btn"
-          />
-          <q-btn
-            label="Clear"
-            outline
-            class="clear-btn"
-          />
-        </div>
+        <a href="#" class="clear-filters-link q-ml-md" @click.prevent="clearFilters">
+          <q-icon name="close" size="16px" class="q-mr-xs" />
+          Clear Filters
+        </a>
       </div>
 
       <!-- Stats Cards -->
@@ -284,13 +265,13 @@ import { ref } from 'vue'
 export default {
   name: 'ApprovalsPage',
   setup() {
-    const priorityLevel = ref(null)
-    const role = ref(null)
-    const projectType = ref(null)
+    const priorityLevel = ref('All')
+    const role = ref('All')
+    const projectType = ref('All')
 
-    const priorityOptions = ['High', 'Medium', 'Low']
-    const roleOptions = ['Manager', 'Director', 'Supervisor']
-    const projectTypeOptions = ['Infrastructure', 'Software', 'Research']
+    const priorityOptions = ['All', 'High', 'Medium', 'Low']
+    const roleOptions = ['All', 'Manager', 'Director', 'Supervisor']
+    const projectTypeOptions = ['All', 'Infrastructure', 'Software', 'Research']
 
     const pagination = ref({
       rowsPerPage: 0
@@ -420,6 +401,12 @@ export default {
       return severityMap[severity] || 'grey'
     }
 
+    const clearFilters = () => {
+      priorityLevel.value = 'All'
+      role.value = 'All'
+      projectType.value = 'All'
+    }
+
     return {
       priorityLevel,
       role,
@@ -436,7 +423,8 @@ export default {
       escalationRows,
       recentActivities,
       getStatusColor,
-      getSeverityColor
+      getSeverityColor,
+      clearFilters
     }
   }
 }
@@ -459,27 +447,59 @@ export default {
   gap: 8px;
 }
 
-.filter-select {
-  min-width: 160px;
+.page-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  font-family: 'Montserrat', sans-serif;
+  margin-left: 5px;
 }
 
-.filter-select :deep(.q-field__control) {
-  border-radius: 10px !important;
+.filter-chip {
+  background: #f3f4f6 !important;
+  border-radius: 20px !important;
+  padding: 6px 12px !important;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
 }
 
-.date-filter-btn {
-  border-radius: 10px;
+.filter-chip .q-icon {
+  color: #9ca3af;
+}
+
+.filter-label {
   font-size: 13px;
-  text-transform: none;
-  padding: 8px 16px;
+  color: #6b7280;
+  font-weight: 500;
 }
 
-.apply-btn {
-  font-family: 'Montserrat', sans-serif;
+.filter-separator {
+  margin: 0 8px;
+  color: #d1d5db;
 }
 
-.clear-btn {
+.filter-value {
+  font-size: 13px;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+.clear-filters-link {
+  font-size: 14px;
+  color: #3b82f6;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
   font-family: 'Montserrat', sans-serif;
+  transition: color 0.2s;
+}
+
+.clear-filters-link:hover {
+  color: #2563eb;
+}
+
+.clear-filters-link .q-icon {
+  color: #3b82f6;
 }
 
 /* KPI Section */

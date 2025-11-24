@@ -2,51 +2,80 @@
   <q-page class="dashboard-page">
     <div class="container">
       <!-- Filters Bar -->
-      <div class="filters-bar row items-center q-px-md q-py-sm bg-grey-2">
-        <q-select 
-          dense 
-          outlined 
-          :options="timeRanges" 
-          v-model="filters.timeRange" 
-          label="Time Range" 
-          bg-color="white"
-          class="filter-select"
-        />
-        <q-select 
-          dense 
-          outlined 
-          :options="departments" 
-          v-model="filters.department" 
-          label="Department: All" 
-          bg-color="white"
-          class="filter-select q-ml-sm"
-          @update:model-value="onDepartmentChange"
-        />
-        <q-select 
-          dense 
-          outlined 
-          :options="sectionOptions" 
-          v-model="filters.section" 
-          label="Section: All" 
-          bg-color="white"
-          class="filter-select q-ml-sm"
-          :disable="!filters.department || filters.department === 'All'"
-          @update:model-value="onSectionChange"
-        />
-        <q-select 
-          dense 
-          outlined 
-          :options="unitOptions" 
-          v-model="filters.unit" 
-          label="Unit: All" 
-          bg-color="white"
-          class="filter-select q-ml-sm"
-          :disable="!filters.section || filters.section === 'All'"
-        />
-
+      <div class="filters-bar row items-center q-px-md q-py-md bg-white">
+        <div class="page-title">Executive Dashboard</div>
         <q-space />
-        <q-btn label="Apply Filters" color="primary" unelevated class="q-mr-sm" @click="applyFilters" />
-        <q-btn label="Clear" outline @click="clearFilters" />
+        
+        <q-chip 
+          clickable
+          class="filter-chip"
+        >
+          <span class="filter-label">Date</span>
+          <span class="filter-separator">|</span>
+          <span class="filter-value">{{ filters.timeRange }}</span>
+          <q-menu>
+            <q-list style="min-width: 150px">
+              <q-item clickable v-close-popup v-for="option in timeRanges" :key="option" @click="filters.timeRange = option">
+                <q-item-section>{{ option }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-chip>
+
+        <q-chip 
+          clickable
+          class="filter-chip"
+        >
+          <span class="filter-label">Department</span>
+          <span class="filter-separator">|</span>
+          <span class="filter-value">{{ filters.department }}</span>
+          <q-menu>
+            <q-list style="min-width: 150px">
+              <q-item clickable v-close-popup v-for="option in departments" :key="option" @click="onDepartmentChange(option)">
+                <q-item-section>{{ option }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-chip>
+
+        <q-chip 
+          clickable
+          class="filter-chip"
+          :disable="!filters.department || filters.department === 'All'"
+        >
+          <span class="filter-label">Section</span>
+          <span class="filter-separator">|</span>
+          <span class="filter-value">{{ filters.section }}</span>
+          <q-menu>
+            <q-list style="min-width: 150px">
+              <q-item clickable v-close-popup v-for="option in sectionOptions" :key="option" @click="onSectionChange(option)">
+                <q-item-section>{{ option }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-chip>
+
+        <q-chip 
+          clickable
+          class="filter-chip"
+          :disable="!filters.section || filters.section === 'All'"
+        >
+          <span class="filter-label">Unit</span>
+          <span class="filter-separator">|</span>
+          <span class="filter-value">{{ filters.unit }}</span>
+          <q-menu>
+            <q-list style="min-width: 150px">
+              <q-item clickable v-close-popup v-for="option in unitOptions" :key="option" @click="filters.unit = option">
+                <q-item-section>{{ option }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-chip>
+
+        <a href="#" class="clear-filters-link q-ml-md" @click.prevent="clearFilters">
+          <q-icon name="close" size="16px" class="q-mr-xs" />
+          Clear Filters
+        </a>
       </div>
 
       <!-- KPI Cards -->
@@ -757,17 +786,63 @@ export default {
 
 /* Filters Bar */
 .filters-bar {
-  background: #f9fafb;
   border-bottom: 1px solid #e5e7eb;
   gap: 8px;
 }
 
-.filter-select {
-  min-width: 160px;
+.page-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  font-family: 'Montserrat', sans-serif;
+  margin-left: 5px;
 }
 
-.filter-select :deep(.q-field__control) {
-  border-radius: 10px !important;
+.filter-chip {
+  background: #f3f4f6 !important;
+  border-radius: 20px !important;
+  padding: 6px 12px !important;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+}
+
+.filter-chip .q-icon {
+  color: #9ca3af;
+}
+
+.filter-label {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.filter-separator {
+  margin: 0 8px;
+  color: #d1d5db;
+}
+
+.filter-value {
+  font-size: 13px;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+.clear-filters-link {
+  font-size: 14px;
+  color: #3b82f6;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  transition: color 0.2s;
+}
+
+.clear-filters-link:hover {
+  color: #2563eb;
+}
+
+.clear-filters-link .q-icon {
+  color: #3b82f6;
 }
 
 /* KPI Section */

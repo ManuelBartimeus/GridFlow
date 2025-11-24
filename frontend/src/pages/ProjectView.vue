@@ -56,7 +56,6 @@
             <div class="sprint-header">
               <div class="sprint-title">
                 Sprint 1
-                <q-badge color="grey-4" text-color="grey-8" label="2" class="q-ml-xs" />
               </div>
               <q-btn flat round dense icon="more_vert" size="sm" color="grey-7" />
             </div>
@@ -75,14 +74,7 @@
                   <div class="progress-text">15%</div>
                 </div>
                 <div class="task-footer">
-                  <div class="task-avatars">
-                    <q-avatar size="24px" color="primary" text-color="white">A</q-avatar>
-                    <q-avatar size="24px" color="secondary" text-color="white">B</q-avatar>
-                    <q-avatar size="24px" color="accent" text-color="white">C</q-avatar>
-                  </div>
                   <div class="task-actions">
-                    <q-btn flat round dense icon="link" size="xs" color="grey-7" />
-                    <q-btn flat round dense icon="attach_money" size="xs" color="grey-7" />
                     <q-btn flat round dense icon="comment" size="xs" color="grey-7" />
                     <q-btn flat round dense icon="more_horiz" size="xs" color="grey-7" />
                   </div>
@@ -102,10 +94,6 @@
                   <div class="progress-text">5%</div>
                 </div>
                 <div class="task-footer">
-                  <div class="task-avatars">
-                    <q-avatar size="24px" color="primary" text-color="white">D</q-avatar>
-                    <q-avatar size="24px" color="secondary" text-color="white">E</q-avatar>
-                  </div>
                   <div class="task-actions">
                     <q-btn flat round dense icon="comment" size="xs" color="grey-7" />
                     <q-btn flat round dense icon="more_horiz" size="xs" color="grey-7" />
@@ -120,7 +108,6 @@
             <div class="sprint-header">
               <div class="sprint-title">
                 Sprint 2
-                <q-badge color="grey-4" text-color="grey-8" label="1" class="q-ml-xs" />
               </div>
               <q-btn flat round dense icon="more_vert" size="sm" color="grey-7" />
             </div>
@@ -139,15 +126,7 @@
                   <div class="progress-text">25%</div>
                 </div>
                 <div class="task-footer">
-                  <div class="task-avatars">
-                    <q-avatar size="24px" color="orange" text-color="white">F</q-avatar>
-                    <q-avatar size="24px" color="purple" text-color="white">G</q-avatar>
-                    <q-avatar size="24px" color="teal" text-color="white">H</q-avatar>
-                    <q-avatar size="24px" color="pink" text-color="white">I</q-avatar>
-                  </div>
                   <div class="task-actions">
-                    <q-btn flat round dense icon="link" size="xs" color="grey-7" />
-                    <q-btn flat round dense icon="attach_money" size="xs" color="grey-7" />
                     <q-btn flat round dense icon="comment" size="xs" color="grey-7" />
                     <q-btn flat round dense icon="more_horiz" size="xs" color="grey-7" />
                   </div>
@@ -161,7 +140,6 @@
             <div class="sprint-header">
               <div class="sprint-title">
                 Sprint 3
-                <q-badge color="grey-4" text-color="grey-8" label="1" class="q-ml-xs" />
               </div>
               <q-btn flat round dense icon="more_vert" size="sm" color="grey-7" />
             </div>
@@ -180,13 +158,9 @@
                   <div class="progress-text">85%</div>
                 </div>
                 <div class="task-footer">
-                  <div class="task-avatars">
-                    <q-avatar size="24px" color="indigo" text-color="white">J</q-avatar>
-                    <q-avatar size="24px" color="cyan" text-color="white">K</q-avatar>
-                  </div>
                   <div class="task-actions">
-                    <q-btn flat round dense icon="link" size="xs" color="grey-7" />
                     <q-btn flat round dense icon="comment" size="xs" color="grey-7" />
+                    <q-btn flat round dense icon="more_horiz" size="xs" color="grey-7" />
                   </div>
                 </div>
               </div>
@@ -380,19 +354,9 @@ export default {
 .task-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   border-top: 1px solid #f3f4f6;
   padding-top: 12px;
-}
-
-.task-avatars {
-  display: flex;
-  gap: 4px;
-}
-
-.task-avatars .q-avatar {
-  font-size: 11px;
-  font-weight: 600;
 }
 
 .task-actions {

@@ -2,75 +2,40 @@
   <q-page class="projects-page">
     <div class="container">
       <!-- Filters Bar -->
-      <div class="filters-bar row items-center justify-between q-px-md q-py-sm bg-grey-2">
-        <div class="row items-center q-gutter-sm">
-          <q-select
-            outlined
-            dense
-            v-model="filters.priorityLevel"
-            :options="priorityOptions"
-            label="Priority Level"
-            class="filter-select"
-            bg-color="white"
-          />
-          <q-select
-            outlined
-            dense
-            v-model="filters.department"
-            :options="departmentOptions"
-            label="Department"
-            class="filter-select"
-            bg-color="white"
-          />
-          <q-select
-            outlined
-            dense
-            v-model="filters.section"
-            :options="sectionOptions"
-            label="Section"
-            class="filter-select"
-            bg-color="white"
-          />
-          <q-select
-            outlined
-            dense
-            v-model="filters.unit"
-            :options="unitOptions"
-            label="Unit"
-            class="filter-select"
-            bg-color="white"
-          />
-          <q-select
-            outlined
-            dense
-            v-model="filters.projectType"
-            :options="projectTypeOptions"
-            label="Project Type"
-            class="filter-select"
-            bg-color="white"
-          />
-          <q-btn
-            outline
-            dense
-            icon="event"
-            label="Date Filter"
-            class="filter-select"
-            color="grey-7"
-          />
-        </div>
-        <div class="row items-center q-gutter-sm">
-          <q-btn
-            unelevated
-            color="primary"
-            label="Apply Filters"
-            class="apply-btn"
-          />
-          <q-btn
-            flat
-            label="Clear"
-            color="grey-7"
-          />
-        </div>
+      <div class="filters-bar row items-center q-px-md q-py-md bg-white">
+        <div class="page-title">All Projects</div>
+        <q-space />
+        
+        <q-chip clickable class="filter-chip">
+          <span class="filter-label">Priority</span>
+          <span class="filter-separator">|</span>
+          <span class="filter-value">{{ filters.priorityLevel }}</span>
+          <q-menu>
+            <q-list style="min-width: 150px">
+              <q-item clickable v-close-popup v-for="option in priorityOptions" :key="option" @click="filters.priorityLevel = option">
+                <q-item-section>{{ option }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-chip>
+
+        <q-chip clickable class="filter-chip">
+          <span class="filter-label">Status</span>
+          <span class="filter-separator">|</span>
+          <span class="filter-value">{{ filters.status }}</span>
+          <q-menu>
+            <q-list style="min-width: 150px">
+              <q-item clickable v-close-popup v-for="option in statusOptions" :key="option" @click="filters.status = option">
+                <q-item-section>{{ option }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-chip>
+
+        <a href="#" class="clear-filters-link q-ml-md" @click.prevent="clearFilters">
+          <q-icon name="close" size="16px" class="q-mr-xs" />
+          Clear Filters
+        </a>
       </div>
 
       <!-- Projects Grid -->
@@ -168,12 +133,14 @@ export default {
       selectedProject: null,
       filters: {
         priorityLevel: 'All',
+        status: 'All',
         department: 'All',
         section: 'All',
         unit: 'All',
         projectType: 'All'
       },
       priorityOptions: ['All', 'High Priority', 'Medium Priority', 'Low Priority'],
+      statusOptions: ['All', 'On Track', 'At Risk', 'Behind Schedule', 'Completed'],
       departmentOptions: ['All', 'Engineering', 'Operations', 'Finance', 'HR'],
       sectionOptions: ['All', 'Mechanical', 'Electrical', 'Civil', 'Software'],
       unitOptions: ['All', 'Unit A', 'Unit B', 'Unit C'],
@@ -575,18 +542,59 @@ export default {
   gap: 8px;
 }
 
-.filter-select {
-  min-width: 160px;
-}
-
-.filter-select :deep(.q-field__control) {
-  border-radius: 10px !important;
-}
-
-.apply-btn {
-  border-radius: 10px !important;
+.page-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
   font-family: 'Montserrat', sans-serif;
-  padding: 8px 24px;
+  margin-left: 5px;
+}
+
+.filter-chip {
+  background: #f3f4f6 !important;
+  border-radius: 20px !important;
+  padding: 6px 12px !important;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+}
+
+.filter-chip .q-icon {
+  color: #9ca3af;
+}
+
+.filter-label {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.filter-separator {
+  margin: 0 8px;
+  color: #d1d5db;
+}
+
+.filter-value {
+  font-size: 13px;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+.clear-filters-link {
+  font-size: 14px;
+  color: #3b82f6;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  transition: color 0.2s;
+}
+
+.clear-filters-link:hover {
+  color: #2563eb;
+}
+
+.clear-filters-link .q-icon {
+  color: #3b82f6;
 }
 
 /* Projects Section */
