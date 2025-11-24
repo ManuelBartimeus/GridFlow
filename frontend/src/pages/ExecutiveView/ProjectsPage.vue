@@ -36,11 +36,31 @@
           <q-icon name="close" size="16px" class="q-mr-xs" />
           Clear Filters
         </a>
+        
+        <div class="view-toggle q-ml-md" @click="viewMode = viewMode === 'grid' ? 'list' : 'grid'">
+          <q-btn
+            flat
+            round
+            dense
+            icon="menu"
+            size="sm"
+            :class="viewMode === 'list' ? 'view-btn active' : 'view-btn'"
+          />
+          <q-btn
+            flat
+            round
+            dense
+            icon="apps"
+            size="sm"
+            :class="viewMode === 'grid' ? 'view-btn active' : 'view-btn'"
+          />
+        </div>
       </div>
 
-      <!-- Projects Grid -->
-      <div class="projects-section q-pa-md">
-        <div class="projects-grid">
+      <!-- Projects Grid/List -->
+      <div :class="viewMode === 'grid' ? 'projects-section q-pa-md' : 'projects-section-list'">
+        <!-- Grid View -->
+        <div v-if="viewMode === 'grid'" class="projects-grid">
           <div
             v-for="project in projects"
             :key="project.id"
@@ -108,6 +128,84 @@
             </div>
           </div>
         </div>
+
+        <!-- List/Table View -->
+        <div v-else class="projects-table-container">
+          <div class="projects-table">
+            <!-- Table Header -->
+            <div class="table-header">
+              <div class="table-cell header-cell" style="flex: 0 0 60px;">NO.</div>
+              <div class="table-cell header-cell" style="flex: 0 0 250px;">PROJECT ID</div>
+              <div class="table-cell header-cell" style="flex: 0 0 180px;">TIMELINE</div>
+              <div class="table-cell header-cell" style="flex: 1 1 0;">DESCRIPTION</div>
+              <div class="table-cell header-cell" style="flex: 0 0 120px;">PRIORITY</div>
+              <div class="table-cell header-cell" style="flex: 0 0 120px;">DEPARTMENT</div>
+              <div class="table-cell header-cell" style="flex: 0 0 100px;">SECTION</div>
+              <div class="table-cell header-cell" style="flex: 0 0 80px;">UNIT</div>
+              <div class="table-cell header-cell" style="flex: 0 0 100px;">PROGRESS</div>
+              <div class="table-cell header-cell" style="flex: 0 0 60px;"></div>
+            </div>
+
+            <!-- Table Rows -->
+            <div
+              v-for="(project, index) in projects"
+              :key="project.id"
+              class="table-row"
+            >
+              <div class="table-cell" style="flex: 0 0 60px;">
+                <div class="cell-number">{{ index + 1 }}</div>
+              </div>
+              <div class="table-cell" style="flex: 0 0 250px;">
+                <div class="cell-project-id">
+                  <div class="project-title-cell">{{ project.title }}</div>
+                  <div class="project-id-cell">{{ project.id }}</div>
+                </div>
+              </div>
+              <div class="table-cell" style="flex: 0 0 180px;">
+                <div class="cell-timeline">{{ project.startDate }} → {{ project.endDate }}</div>
+              </div>
+              <div class="table-cell" style="flex: 1 1 0;">
+                <div class="cell-description">{{ project.description }}</div>
+              </div>
+              <div class="table-cell" style="flex: 0 0 120px;">
+                <q-badge
+                  :color="project.priority === 'High Priority' ? 'red-1' : project.priority === 'Medium Priority' ? 'yellow-1' : 'blue-1'"
+                  :text-color="project.priority === 'High Priority' ? 'red-8' : project.priority === 'Medium Priority' ? 'yellow-9' : 'blue-8'"
+                  :label="project.priority.replace(' Priority', '')"
+                  class="priority-badge-table"
+                />
+              </div>
+              <div class="table-cell" style="flex: 0 0 120px;">
+                <div class="cell-text">{{ project.tags[0] || '-' }}</div>
+              </div>
+              <div class="table-cell" style="flex: 0 0 100px;">
+                <div class="cell-text">{{ project.tags[1] || '-' }}</div>
+              </div>
+              <div class="table-cell" style="flex: 0 0 80px;">
+                <div class="cell-text">{{ project.tags[2] || '-' }}</div>
+              </div>
+              <div class="table-cell" style="flex: 0 0 100px;">
+                <div class="cell-progress">
+                  <div class="progress-bar-cell">
+                    <div class="progress-fill" :style="{ width: project.progress + '%' }"></div>
+                  </div>
+                  <div class="progress-text-cell">{{ project.progress }}%</div>
+                </div>
+              </div>
+              <div class="table-cell table-actions" style="flex: 0 0 60px;">
+                <q-btn
+                  flat
+                  round
+                  dense
+                  icon="info"
+                  size="sm"
+                  color="grey-7"
+                  @click="openProjectDetails(project)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -129,6 +227,7 @@ export default {
   },
   data() {
     return {
+      viewMode: localStorage.getItem('projectViewMode') || 'grid',
       showDetailsDialog: false,
       selectedProject: null,
       filters: {
@@ -517,6 +616,17 @@ export default {
       ]
     }
   },
+  watch: {
+    viewMode(newValue) {
+      localStorage.setItem('projectViewMode', newValue)
+    }
+  },
+  mounted() {
+    const savedViewMode = localStorage.getItem('projectViewMode')
+    if (savedViewMode) {
+      this.viewMode = savedViewMode
+    }
+  },
   methods: {
     openProjectDetails(project) {
       this.selectedProject = project
@@ -597,14 +707,53 @@ export default {
   color: #3b82f6;
 }
 
+.view-toggle {
+  display: flex;
+  gap: 4px;
+  background: #f3f4f6;
+  border-radius: 20px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.view-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  color: #6b7280;
+}
+
+.view-btn.active {
+  background: #1f2937 !important;
+  color: white !important;
+}
+
+.view-btn:not(.active):hover {
+  background: #e5e7eb;
+}
+
 /* Projects Section */
 .projects-section {
   background: transparent;
 }
 
+.projects-section-list {
+  background: transparent;
+  padding: 0;
+  height: calc(100vh - 120px);
+  overflow: hidden;
+}
+
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
@@ -620,6 +769,206 @@ export default {
 
 .project-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Table View Styles */
+.projects-table-container {
+  background: white;
+  border-radius: 0;
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  overflow: auto;
+  height: 100%;
+}
+
+.projects-table {
+  width: 100%;
+}
+
+.table-header {
+  display: flex;
+  background: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+  padding: 12px 16px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.table-row {
+  display: flex;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 16px;
+  transition: background 0.2s;
+  align-items: center;
+}
+
+.table-row:hover {
+  background: #f9fafb;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-cell {
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+}
+
+.header-cell {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.cell-project-id {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-title-cell {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 2px;
+}
+
+.project-id-cell {
+  font-size: 11px;
+  color: #6b7280;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.cell-timeline {
+  font-size: 12px;
+  color: #6b7280;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.cell-description {
+  font-size: 12px;
+  color: #6b7280;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.cell-text {
+  font-size: 12px;
+  color: #1f2937;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.cell-number {
+  font-size: 12px;
+  color: #6b7280;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}
+
+.priority-badge-table {
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.cell-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.progress-bar-cell {
+  flex: 1;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #3b82f6;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
+
+.progress-text-cell {
+  font-size: 11px;
+  font-weight: 600;
+  color: #1f2937;
+  font-family: 'Montserrat', sans-serif;
+  min-width: 35px;
+}
+
+.table-actions {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.project-card-list {
+  display: grid;
+  grid-template-columns: 300px 1fr auto;
+  gap: 24px;
+  align-items: center;
+  padding: 20px 24px;
+}
+
+.project-card-list .project-header {
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 0;
+}
+
+.project-card-list .project-header .row {
+  margin-bottom: 8px;
+}
+
+.project-card-list .project-title,
+.project-card-list .project-id {
+  margin-bottom: 4px;
+}
+
+.project-card-list .project-description {
+  margin-bottom: 0;
+}
+
+.project-card-list .project-timeline {
+  margin-bottom: 0;
+}
+
+.project-card-list .progress-container {
+  width: 200px;
+  margin-bottom: 0;
+}
+
+.project-card-list .view-details-btn {
+  margin-left: auto;
+  padding: 10px 20px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  justify-content: center;
+}
+
+.project-card-list .view-details-btn:hover {
+  background: #e5e7eb;
+}
+
+.project-card-list .link-btn {
+  position: static;
+  margin-left: 8px;
 }
 
 .project-header {
