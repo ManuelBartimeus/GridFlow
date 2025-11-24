@@ -47,8 +47,23 @@ const routes = [
         meta: { requiresAuth: true, view: 'unit-personnel' }
       },
       { 
-        path: 'unit-personnel/projects', 
-        component: () => import('pages/UnitPersonnelView/ProjectsPage.vue'),
+        path: 'unit-personnel/my-projects', 
+        component: () => import('pages/UnitPersonnelView/MyProjectsPage.vue'),
+        meta: { requiresAuth: true, view: 'unit-personnel' }
+      },
+      { 
+        path: 'project/:id', 
+        component: () => import('pages/ProjectView.vue'),
+        meta: { requiresAuth: true }
+      },
+      { 
+        path: 'middle-management/project/:id', 
+        component: () => import('pages/ProjectView.vue'),
+        meta: { requiresAuth: true, view: 'middle-management' }
+      },
+      { 
+        path: 'unit-personnel/project/:id', 
+        component: () => import('pages/ProjectView.vue'),
         meta: { requiresAuth: true, view: 'unit-personnel' }
       }
     ],

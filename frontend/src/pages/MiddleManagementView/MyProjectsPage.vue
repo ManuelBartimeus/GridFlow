@@ -76,6 +76,15 @@
       <!-- Projects Grid -->
       <div class="projects-section q-pa-md">
         <div class="projects-grid">
+          <!-- Issue Project Card -->
+          <div class="issue-project-card" @click="issueProject">
+            <div class="issue-project-content">
+              <q-icon name="post_add" size="48px" color="grey-7" class="q-mb-md" />
+              <div class="issue-project-title">Issue Project</div>
+              <div class="issue-project-subtitle">Create a new project</div>
+            </div>
+          </div>
+
           <div
             v-for="project in projects"
             :key="project.id"
@@ -146,18 +155,6 @@
               OPEN PROJECT
             </div>
           </div>
-        </div>
-
-        <!-- Issue Project Button -->
-        <div class="issue-project-section q-mt-lg">
-          <q-btn
-            unelevated
-            class="issue-project-btn"
-            @click="issueProject"
-          >
-            <q-icon name="add" size="18px" class="q-mr-xs" />
-            Issue Project
-          </q-btn>
         </div>
       </div>
     </div>
@@ -290,8 +287,11 @@ export default {
       this.showDetailsDialog = true
     },
     openProject(project) {
-      // Navigate to project or open in new context
-      console.log('Opening project:', project.id)
+      // Navigate to project view
+      this.$router.push({
+        path: `/middle-management/project/${project.id}`,
+        query: { name: project.title }
+      })
     },
     issueProject() {
       // Handle issue project action
@@ -338,14 +338,14 @@ export default {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
 }
 
 .project-card {
   background: white;
-  padding: 24px;
-  border-radius: 16px;
+  padding: 16px;
+  border-radius: 12px;
   border: 1px solid #e5e7eb;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   position: relative;
@@ -363,29 +363,29 @@ export default {
 }
 
 .priority-badge {
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 6px;
+  font-size: 9px;
+  padding: 3px 8px;
+  border-radius: 4px;
   font-weight: 500;
   font-family: 'Montserrat', sans-serif;
 }
 
 .tag-badge {
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 6px;
+  font-size: 9px;
+  padding: 3px 8px;
+  border-radius: 4px;
   font-weight: 400;
   font-family: 'Montserrat', sans-serif;
 }
 
 .info-btn {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 14px;
+  right: 14px;
 }
 
 .project-title {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 600;
   color: #1f2937;
   font-family: 'Montserrat', sans-serif;
@@ -393,21 +393,21 @@ export default {
 }
 
 .project-id {
-  font-size: 13px;
+  font-size: 11px;
   color: #6b7280;
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
 }
 
 .project-description {
-  font-size: 14px;
+  font-size: 12px;
   color: #6b7280;
   font-family: 'Montserrat', sans-serif;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .project-timeline {
-  font-size: 13px;
+  font-size: 11px;
   color: #6b7280;
   font-family: 'Montserrat', sans-serif;
   display: flex;
@@ -430,8 +430,8 @@ export default {
 .progress-label {
   position: absolute;
   right: 0;
-  top: -20px;
-  font-size: 13px;
+  top: -18px;
+  font-size: 11px;
   color: #1f2937;
   font-weight: 600;
   font-family: 'Montserrat', sans-serif;
@@ -441,9 +441,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 8px;
+  gap: 6px;
   color: #9ca3af;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.5px;
   cursor: pointer;
@@ -456,30 +456,46 @@ export default {
   color: #6b7280;
 }
 
-/* Issue Project Section */
-.issue-project-section {
+/* Issue Project Card */
+.issue-project-card {
+  background: #e5e7eb;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.2s;
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 0 12px;
+  min-height: 280px;
 }
 
-.issue-project-btn {
-  background: #e5e7eb;
+.issue-project-card:hover {
+  background: #d1d5db;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.issue-project-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.issue-project-title {
+  font-size: 15px;
+  font-weight: 600;
   color: #1f2937;
   font-family: 'Montserrat', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 10px 20px;
-  border-radius: 8px;
-  text-transform: none;
-  letter-spacing: 0.3px;
-  transition: all 0.2s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin-bottom: 4px;
 }
 
-.issue-project-btn:hover {
-  background: #d1d5db;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+.issue-project-subtitle {
+  font-size: 12px;
+  color: #6b7280;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Project Details Dialog */
@@ -906,6 +922,12 @@ export default {
 
 /* Responsive */
 @media (max-width: 1400px) {
+  .projects-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1000px) {
   .projects-grid {
     grid-template-columns: repeat(2, 1fr);
   }

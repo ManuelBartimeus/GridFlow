@@ -57,17 +57,15 @@
 
         <div class="row items-center q-gutter-sm">
           <q-btn
-            unelevated
-            color="primary"
             label="Apply Filters"
+            color="primary"
+            unelevated
             class="apply-btn"
-            no-caps
           />
           <q-btn
-            flat
             label="Clear"
+            outline
             class="clear-btn"
-            no-caps
           />
         </div>
       </div>
@@ -477,14 +475,11 @@ export default {
 }
 
 .apply-btn {
-  border-radius: 10px !important;
   font-family: 'Montserrat', sans-serif;
-  padding: 8px 24px;
 }
 
 .clear-btn {
-  font-size: 13px;
-  color: #6b7280;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* KPI Section */

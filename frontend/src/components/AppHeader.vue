@@ -31,7 +31,7 @@
         </div>
         
         <!-- Regular Projects Link for Executive and Unit Personnel -->
-        <router-link v-else :to="projectsRoute" class="nav-link" active-class="active" exact-active-class="active">Projects</router-link>
+        <router-link v-else :to="projectsRoute" class="nav-link" active-class="active" exact-active-class="active">{{ projectsLinkLabel }}</router-link>
         
         <router-link v-if="showApprovals" :to="approvalsRoute" class="nav-link" active-class="active" exact-active-class="active">Approvals</router-link>
       </div>
@@ -51,7 +51,6 @@
           <q-icon name="search" size="18px" />
         </template>
       </q-input>
-      <div class="text-caption text-grey-7">Last Updated: 1 min ago</div>
       <q-btn flat round dense icon="wb_sunny" size="sm" />
       <q-btn flat round dense icon="dark_mode" size="sm" />
       
@@ -97,6 +96,7 @@ export default {
     const showApprovals = ref(false)
     const showProjectsDropdown = ref(false)
     const projectsDropdownLabel = ref('')
+    const projectsLinkLabel = ref('Projects')
     const isProjectsActive = ref(false)
 
     onMounted(() => {
@@ -127,7 +127,8 @@ export default {
           
         } else if (user.view === 'unit-personnel') {
           dashboardRoute.value = '/unit-personnel/dashboard'
-          projectsRoute.value = '/unit-personnel/projects'
+          projectsRoute.value = '/unit-personnel/my-projects'
+          projectsLinkLabel.value = 'My Projects'
           showApprovals.value = false
           showProjectsDropdown.value = false
         } else {
@@ -158,6 +159,7 @@ export default {
       showApprovals,
       showProjectsDropdown,
       projectsDropdownLabel,
+      projectsLinkLabel,
       isProjectsActive,
       router,
       handleLogout

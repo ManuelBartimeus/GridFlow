@@ -241,8 +241,11 @@ export default {
       this.showDetailsDialog = true
     },
     openProject(project) {
-      // Navigate to project or open in new context
-      console.log('Opening project:', project.id)
+      // Navigate to project view
+      this.$router.push({
+        path: `/project/${project.id}`,
+        query: { name: project.title }
+      })
     }
   }
 }
@@ -285,14 +288,14 @@ export default {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
 }
 
 .project-card {
   background: white;
-  padding: 24px;
-  border-radius: 16px;
+  padding: 16px;
+  border-radius: 12px;
   border: 1px solid #e5e7eb;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   position: relative;
@@ -310,29 +313,29 @@ export default {
 }
 
 .priority-badge {
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 6px;
+  font-size: 9px;
+  padding: 3px 8px;
+  border-radius: 4px;
   font-weight: 500;
   font-family: 'Montserrat', sans-serif;
 }
 
 .tag-badge {
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 6px;
+  font-size: 9px;
+  padding: 3px 8px;
+  border-radius: 4px;
   font-weight: 400;
   font-family: 'Montserrat', sans-serif;
 }
 
 .info-btn {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 14px;
+  right: 14px;
 }
 
 .project-title {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 600;
   color: #1f2937;
   font-family: 'Montserrat', sans-serif;
@@ -340,21 +343,21 @@ export default {
 }
 
 .project-id {
-  font-size: 13px;
+  font-size: 11px;
   color: #6b7280;
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
 }
 
 .project-description {
-  font-size: 14px;
+  font-size: 12px;
   color: #6b7280;
   font-family: 'Montserrat', sans-serif;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .project-timeline {
-  font-size: 13px;
+  font-size: 11px;
   color: #6b7280;
   font-family: 'Montserrat', sans-serif;
   display: flex;
@@ -377,8 +380,8 @@ export default {
 .progress-label {
   position: absolute;
   right: 0;
-  top: -20px;
-  font-size: 13px;
+  top: -18px;
+  font-size: 11px;
   color: #1f2937;
   font-weight: 600;
   font-family: 'Montserrat', sans-serif;
@@ -388,9 +391,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 8px;
+  gap: 6px;
   color: #9ca3af;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.5px;
   cursor: pointer;
@@ -405,6 +408,12 @@ export default {
 
 /* Responsive */
 @media (max-width: 1400px) {
+  .projects-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1000px) {
   .projects-grid {
     grid-template-columns: repeat(2, 1fr);
   }
