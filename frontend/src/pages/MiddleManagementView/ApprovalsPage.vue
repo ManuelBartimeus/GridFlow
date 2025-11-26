@@ -45,6 +45,20 @@
           </q-menu>
         </q-chip>
 
+        <q-chip 
+          clickable
+          class="filter-chip"
+        >
+          <q-icon name="event" size="18px" color="grey-7" />
+          <q-menu>
+            <q-list style="min-width: 150px">
+              <q-item clickable v-close-popup v-for="option in dateOptions" :key="option" @click="dateFilter = option">
+                <q-item-section>{{ option }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-chip>
+
         <a href="#" class="clear-filters-link q-ml-md" @click.prevent="clearFilters">
           <q-icon name="close" size="16px" class="q-mr-xs" />
           Clear Filters
@@ -268,10 +282,12 @@ export default {
     const priorityLevel = ref('All')
     const role = ref('All')
     const projectType = ref('All')
+    const dateFilter = ref('All Time')
 
     const priorityOptions = ['All', 'High', 'Medium', 'Low']
     const roleOptions = ['All', 'Manager', 'Director', 'Supervisor']
     const projectTypeOptions = ['All', 'Infrastructure', 'Software', 'Research']
+    const dateOptions = ['All Time', 'Today', 'This Week', 'This Month', 'This Quarter', 'This Year']
 
     const pagination = ref({
       rowsPerPage: 0
@@ -405,15 +421,18 @@ export default {
       priorityLevel.value = 'All'
       role.value = 'All'
       projectType.value = 'All'
+      dateFilter.value = 'All Time'
     }
 
     return {
       priorityLevel,
       role,
       projectType,
+      dateFilter,
       priorityOptions,
       roleOptions,
       projectTypeOptions,
+      dateOptions,
       pagination,
       weeklyData,
       maxValue,

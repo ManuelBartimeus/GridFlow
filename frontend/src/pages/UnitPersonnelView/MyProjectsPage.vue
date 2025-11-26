@@ -7,7 +7,7 @@
         <q-space />
         
         <q-chip clickable class="filter-chip">
-          <span class="filter-label">Priority</span>
+          <span class="filter-label">Priority Level</span>
           <span class="filter-separator">|</span>
           <span class="filter-value">{{ filters.priorityLevel }}</span>
           <q-menu>
@@ -20,12 +20,36 @@
         </q-chip>
 
         <q-chip clickable class="filter-chip">
-          <span class="filter-label">Status</span>
+          <span class="filter-label">Role</span>
           <span class="filter-separator">|</span>
-          <span class="filter-value">{{ filters.status }}</span>
+          <span class="filter-value">{{ filters.role }}</span>
           <q-menu>
             <q-list style="min-width: 150px">
-              <q-item clickable v-close-popup v-for="option in statusOptions" :key="option" @click="filters.status = option">
+              <q-item clickable v-close-popup v-for="option in roleOptions" :key="option" @click="filters.role = option">
+                <q-item-section>{{ option }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-chip>
+
+        <q-chip clickable class="filter-chip">
+          <span class="filter-label">Project Type</span>
+          <span class="filter-separator">|</span>
+          <span class="filter-value">{{ filters.projectType }}</span>
+          <q-menu>
+            <q-list style="min-width: 150px">
+              <q-item clickable v-close-popup v-for="option in projectTypeOptions" :key="option" @click="filters.projectType = option">
+                <q-item-section>{{ option }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-chip>
+
+        <q-chip clickable class="filter-chip">
+          <q-icon name="event" size="18px" color="grey-7" />
+          <q-menu>
+            <q-list style="min-width: 150px">
+              <q-item clickable v-close-popup v-for="option in dateOptions" :key="option" @click="filters.dateFilter = option">
                 <q-item-section>{{ option }}</q-item-section>
               </q-item>
             </q-list>
@@ -245,18 +269,14 @@ export default {
       selectedProject: null,
       filters: {
         priorityLevel: 'All',
-        status: 'All',
-        department: 'All',
-        section: 'All',
-        unit: 'All',
-        projectType: 'All'
+        role: 'All',
+        projectType: 'All',
+        dateFilter: 'All Time'
       },
       priorityOptions: ['All', 'High Priority', 'Medium Priority', 'Low Priority'],
-      statusOptions: ['All', 'On Track', 'At Risk', 'Behind Schedule', 'Completed'],
-      departmentOptions: ['All', 'Engineering', 'Operations', 'Finance', 'HR'],
-      sectionOptions: ['All', 'Mechanical', 'Electrical', 'Civil', 'Software'],
-      unitOptions: ['All', 'Unit A', 'Unit B', 'Unit C'],
+      roleOptions: ['All', 'Project Manager', 'Team Lead', 'Developer', 'Designer'],
       projectTypeOptions: ['All', 'Development', 'Research', 'Maintenance'],
+      dateOptions: ['All Time', 'Today', 'This Week', 'This Month', 'This Quarter', 'This Year'],
       projects: [
         {
           id: 'PROJ-001',
@@ -324,7 +344,9 @@ export default {
   methods: {
     clearFilters() {
       this.filters.priorityLevel = 'All'
-      this.filters.status = 'All'
+      this.filters.role = 'All'
+      this.filters.projectType = 'All'
+      this.filters.dateFilter = 'All Time'
     },
     openProjectDetails(project) {
       this.selectedProject = project
