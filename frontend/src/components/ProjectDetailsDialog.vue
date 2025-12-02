@@ -36,49 +36,6 @@
                   <div class="gantt-empty-subtext">Add tasks to visualize project timeline</div>
                 </div>
               </div>
-
-              <!-- Gantt Chart with Tasks -->
-              <div v-else class="gantt-chart-container">
-                <div class="gantt-timeline-header">
-                  <div class="gantt-project-dates">
-                    <span class="gantt-start-date">{{ project?.startDate }}</span>
-                    <span class="gantt-date-separator">—</span>
-                    <span class="gantt-end-date">{{ project?.endDate }}</span>
-                  </div>
-                </div>
-                
-                <div class="gantt-chart">
-                  <!-- Month Labels -->
-                  <div class="gantt-timeline">
-                    <div class="gantt-timeline-label">Timeline</div>
-                    <div class="gantt-timeline-months">
-                      <div class="gantt-month" v-for="month in project?.ganttMonths" :key="month">{{ month }}</div>
-                    </div>
-                  </div>
-
-                  <!-- Task Rows -->
-                  <div class="gantt-task-row" v-for="task in project?.tasks" :key="task.name">
-                    <div class="gantt-task-label">
-                      <div class="gantt-task-name">{{ task.name }}</div>
-                      <div class="gantt-task-dates">{{ task.dates }}</div>
-                    </div>
-                    <div class="gantt-task-timeline">
-                      <div class="gantt-task-bar-container">
-                        <div 
-                          class="gantt-task-bar" 
-                          :style="{
-                            left: task.ganttStart + '%',
-                            width: task.ganttWidth + '%',
-                            backgroundColor: task.ganttColor
-                          }"
-                        >
-                          <span class="gantt-task-duration">{{ task.ganttDuration }}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
               
               <!-- Timeline Stats -->
               <div class="timeline-stats row q-gutter-md q-mt-md">
@@ -96,21 +53,17 @@
                 </div>
               </div>
 
-              <!-- Task List -->
+              <!-- Sprint List -->
               <div class="task-list q-mt-md">
                 <div class="task-header row items-center q-py-sm">
-                  <div class="col-4 text-weight-medium">TASK NAME</div>
-                  <div class="col-3 text-weight-medium">DATES</div>
-                  <div class="col-3 text-weight-medium">ASSIGNED</div>
-                  <div class="col-2 text-weight-medium">STATUS</div>
+                  <div class="col-5 text-weight-medium">SPRINT NAME</div>
+                  <div class="col-4 text-weight-medium">DATES</div>
+                  <div class="col-3 text-weight-medium">PROGRESS</div>
                 </div>
                 <div class="task-row row items-center q-py-sm" v-for="task in project?.tasks" :key="task.name">
-                  <div class="col-4">{{ task.name }}</div>
-                  <div class="col-3 text-grey-7">{{ task.dates }}</div>
-                  <div class="col-3 text-grey-7">{{ task.assigned }}</div>
-                  <div class="col-2">
-                    <q-badge :color="task.statusColor" :text-color="task.statusTextColor" :label="task.status" class="status-badge" />
-                  </div>
+                  <div class="col-5">{{ task.name }}</div>
+                  <div class="col-4 text-grey-7">{{ task.dates }}</div>
+                  <div class="col-3 text-grey-7">{{ task.progress || 0 }}%</div>
                 </div>
               </div>
             </div>
@@ -177,6 +130,88 @@
                     <q-badge :color="link.statusColor" :text-color="link.statusTextColor" :label="link.status" class="status-badge" />
                   </div>
                   <div class="col-2 text-grey-7">{{ link.owner }}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Project Members -->
+            <div class="details-section q-mt-md">
+              <div class="section-title row items-center justify-between">
+                <div class="row items-center">
+                  <q-icon name="people" color="teal-7" size="20px" class="q-mr-sm" />
+                  <span>Project Members</span>
+                </div>
+                <q-btn
+                  flat
+                  dense
+                  round
+                  icon="add"
+                  color="primary"
+                  size="sm"
+                  @click="startAddingMember"
+                  class="add-member-btn"
+                />
+              </div>
+              <div class="members-list">
+                <!-- Existing members -->
+                <div class="member-item row items-center justify-between q-py-sm" v-for="member in sampleMembers" :key="member.id">
+                  <div class="member-info">
+                    <div class="member-name">{{ member.name }}</div>
+                    <div class="member-role text-grey-7">{{ member.role }}</div>
+                  </div>
+                  <q-btn
+                    flat
+                    round
+                    dense
+                    icon="delete"
+                    color="negative"
+                    size="sm"
+                    @click="deleteMember(member.id)"
+                    class="delete-member-btn"
+                  />
+                </div>
+
+                <!-- New member input row -->
+                <div v-if="isAddingMember" class="member-item-add row items-center justify-between q-py-sm">
+                  <q-select
+                    v-model="newMember"
+                    :options="availableEmployees"
+                    option-value="id"
+                    option-label="name"
+                    outlined
+                    dense
+                    placeholder="Select employee"
+                    bg-color="white"
+                    class="new-member-select"
+                    @update:model-value="onEmployeeSelected"
+                  >
+                    <template v-slot:prepend>
+                      <q-icon name="person_add" />
+                    </template>
+                  </q-select>
+                  <div class="member-actions row q-gutter-xs">
+                    <q-btn
+                      flat
+                      round
+                      dense
+                      icon="check"
+                      color="positive"
+                      size="sm"
+                      @click="confirmAddMember"
+                      :disable="!newMember"
+                      class="confirm-btn"
+                    />
+                    <q-btn
+                      flat
+                      round
+                      dense
+                      icon="close"
+                      color="negative"
+                      size="sm"
+                      @click="cancelAddMember"
+                      class="cancel-btn"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -289,11 +324,11 @@
               </div>
             </div>
 
-            <!-- Project Roles -->
+            <!-- Project Management -->
             <div class="details-section q-mt-md">
               <div class="section-title">
                 <q-icon name="groups" color="pink-7" size="20px" class="q-mr-sm" />
-                Project Roles
+                Project Management
               </div>
               <div class="role-item" v-for="role in sampleRoles" :key="role.title">
                 <div class="role-title">{{ role.title }}</div>
@@ -345,6 +380,21 @@ export default {
   emits: ['update:modelValue'],
   data() {
     return {
+      isAddingMember: false,
+      newMember: null,
+      nextMemberId: 6,
+      availableEmployees: [
+        { id: 101, name: 'Sarah Johnson', role: 'Project Owner' },
+        { id: 102, name: 'Michael Chen', role: 'Technical Lead' },
+        { id: 103, name: 'Emma Davis', role: 'Project Manager' },
+        { id: 104, name: 'David Rodriguez', role: 'QA Engineer' },
+        { id: 105, name: 'Lisa Anderson', role: 'Developer' },
+        { id: 106, name: 'James Smith', role: 'Business Analyst' },
+        { id: 107, name: 'Patricia Brown', role: 'UX Designer' },
+        { id: 108, name: 'Robert Taylor', role: 'DevOps Engineer' },
+        { id: 109, name: 'Jennifer Wilson', role: 'Data Analyst' },
+        { id: 110, name: 'William Martinez', role: 'QA Tester' }
+      ],
       sampleEntries: [
         { name: 'Hardware Components', amount: '$42,000', date: 'Sep 12, 2024' },
         { name: 'Software Licenses', amount: '$18,500', date: 'Sep 5, 2024' },
@@ -356,6 +406,13 @@ export default {
         { name: 'Security Audit', relationship: 'Related To', status: 'Complete', statusColor: 'green-1', statusTextColor: 'green-8', owner: 'IT Security' },
         { name: 'Budget Approval', relationship: 'Blocks', status: 'Pending', statusColor: 'orange-1', statusTextColor: 'orange-8', owner: 'Finance' }
       ],
+      sampleMembers: [
+        { id: 1, name: 'Sarah Johnson', role: 'Project Owner' },
+        { id: 2, name: 'Michael Chen', role: 'Technical Lead' },
+        { id: 3, name: 'Emma Davis', role: 'Project Manager' },
+        { id: 4, name: 'David Rodriguez', role: 'QA Engineer' },
+        { id: 5, name: 'Lisa Anderson', role: 'Developer' }
+      ],
       sampleFiles: [
         { name: 'Project Charter.pdf', size: '2.4 MB', icon: 'description' },
         { name: 'Technical Specs.docx', size: '1.8 MB', icon: 'article' },
@@ -363,16 +420,51 @@ export default {
         { name: 'Presentation.pptx', size: '4.2 MB', icon: 'slideshow' }
       ],
       sampleRoles: [
-        { title: 'Project Manager', name: 'Sarah Johnson' },
-        { title: 'Technical Lead', name: 'Michael Chen' },
-        { title: 'Business Analyst', name: 'Emma Davis' },
-        { title: 'QA Lead', name: 'David Rodriguez' }
+        { title: 'Project Owner', name: 'Sarah Johnson' },
+        { title: 'Project Sponsor', name: 'Michael Chen' },
+        { title: 'Project Manager', name: 'Emma Davis' },
+        { title: 'Team Lead', name: 'David Rodriguez' }
       ],
       sampleTickets: [
         { name: 'Budget Increase Request', status: 'Open', statusColor: 'orange-1', statusTextColor: 'orange-8', from: 'Finance' },
         { name: 'Resource Allocation', status: 'In Review', statusColor: 'blue-1', statusTextColor: 'blue-8', from: 'HR' },
         { name: 'Timeline Extension', status: 'Closed', statusColor: 'grey-3', statusTextColor: 'grey-8', from: 'PMO' }
       ]
+    }
+  },
+  methods: {
+    startAddingMember() {
+      this.isAddingMember = true
+      this.newMember = null
+    },
+    onEmployeeSelected(employee) {
+      // Employee is selected, can be used for additional logic if needed
+      this.newMember = employee
+    },
+    confirmAddMember() {
+      if (this.newMember) {
+        // Check if employee is already a member
+        const isAlreadyMember = this.sampleMembers.some(m => m.id === this.newMember.id)
+        if (!isAlreadyMember) {
+          // Add new member
+          this.sampleMembers.push({
+            id: this.newMember.id,
+            name: this.newMember.name,
+            role: this.newMember.role
+          })
+        }
+        this.cancelAddMember()
+      }
+    },
+    cancelAddMember() {
+      this.isAddingMember = false
+      this.newMember = null
+    },
+    deleteMember(memberId) {
+      const index = this.sampleMembers.findIndex(member => member.id === memberId)
+      if (index > -1) {
+        this.sampleMembers.splice(index, 1)
+      }
     }
   }
 }
@@ -922,6 +1014,99 @@ export default {
   font-size: 12px;
   font-weight: 500;
   font-family: 'Montserrat', sans-serif;
+}
+
+/* Members List */
+.members-list {
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  padding: 8px 16px;
+}
+
+.member-item {
+  font-size: 13px;
+  color: #1f2937;
+  font-family: 'Montserrat', sans-serif;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 12px 0;
+}
+
+.member-item:last-child {
+  border-bottom: none;
+}
+
+.member-info {
+  flex: 1;
+}
+
+.member-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1f2937;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.member-role {
+  font-size: 11px;
+  color: #6b7280;
+  font-family: 'Montserrat', sans-serif;
+  margin-top: 2px;
+}
+
+.add-member-btn {
+  transition: all 0.2s;
+}
+
+.add-member-btn:hover {
+  background: #f3f4f6;
+}
+
+.delete-member-btn {
+  transition: all 0.2s;
+}
+
+.delete-member-btn:hover {
+  background: #fee2e2;
+}
+
+/* Member Add Row */
+.member-item-add {
+  font-size: 13px;
+  color: #1f2937;
+  font-family: 'Montserrat', sans-serif;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 12px 0;
+  background: #f0fdf4;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.new-member-select {
+  flex: 1;
+  margin-right: 12px;
+}
+
+.member-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.confirm-btn {
+  transition: all 0.2s;
+}
+
+.confirm-btn:hover:not(.disabled) {
+  background: #dcfce7;
+}
+
+.cancel-btn {
+  transition: all 0.2s;
+}
+
+.cancel-btn:hover {
+  background: #fee2e2;
 }
 
 /* Responsive */
