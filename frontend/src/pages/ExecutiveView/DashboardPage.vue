@@ -129,16 +129,16 @@
                 <div class="row items-center justify-center q-mt-md" style="gap: 150px;">
                   <div class="health-legend health-legend-left" style="gap: 45px;">
                     <div class="legend-item">
-                      <div class="legend-dot" style="background: #10b981;"></div>
+                      <div class="legend-dot" style="background: #ef4444;"></div>
                       <div class="legend-content">
-                        <div class="legend-title">On Track</div>
+                        <div class="legend-title">Not Started</div>
                         <div class="legend-subtitle">136 Projects</div>
                       </div>
                     </div>
                     <div class="legend-item">
                       <div class="legend-dot" style="background: #f59e0b;"></div>
                       <div class="legend-content">
-                        <div class="legend-title">At Risk</div>
+                        <div class="legend-title">In Progress</div>
                         <div class="legend-subtitle">42 Projects</div>
                       </div>
                     </div>
@@ -148,14 +148,14 @@
                     <svg viewBox="0 0 200 200" class="donut-chart">
                       <!-- Background circle -->
                       <circle cx="100" cy="100" r="80" fill="none" stroke="#f0f0f0" stroke-width="25"/>
-                      <!-- Green segment (On Track - 65%) -->
-                      <circle cx="100" cy="100" r="80" fill="none" stroke="#10b981" stroke-width="25"
+                      <!-- Red segment (Not Started - 65%) -->
+                      <circle cx="100" cy="100" r="80" fill="none" stroke="#ef4444" stroke-width="25"
                               stroke-dasharray="325 502" transform="rotate(-90 100 100)" stroke-linecap="round"/>
-                      <!-- Orange segment (At Risk - 20%) -->
+                      <!-- Gold segment (In Progress - 20%) -->
                       <circle cx="100" cy="100" r="80" fill="none" stroke="#f59e0b" stroke-width="25"
                               stroke-dasharray="100 502" stroke-dashoffset="-325" transform="rotate(-90 100 100)" stroke-linecap="round"/>
-                      <!-- Red segment (Critical - 15%) -->
-                      <circle cx="100" cy="100" r="80" fill="none" stroke="#ef4444" stroke-width="25"
+                      <!-- Green segment (Completed - 15%) -->
+                      <circle cx="100" cy="100" r="80" fill="none" stroke="#10b981" stroke-width="25"
                               stroke-dasharray="75 502" stroke-dashoffset="-425" transform="rotate(-90 100 100)" stroke-linecap="round"/>
                       <!-- Center text container -->
                       <foreignObject x="0" y="0" width="200" height="200">
@@ -169,9 +169,9 @@
 
                   <div class="health-legend health-legend-right" style="gap: 45px;">
                     <div class="legend-item">
-                      <div class="legend-dot" style="background: #ef4444;"></div>
+                      <div class="legend-dot" style="background: #10b981;"></div>
                       <div class="legend-content">
-                        <div class="legend-title">Critical</div>
+                        <div class="legend-title">Completed</div>
                         <div class="legend-subtitle">32 Projects</div>
                       </div>
                     </div>
