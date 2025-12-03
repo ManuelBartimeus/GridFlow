@@ -190,8 +190,8 @@
                     <span class="detail-value">12</span>
                   </div>
                   <div class="detail-row">
-                    <span class="detail-label">SLA Breaches</span>
-                    <span class="detail-value text-red">2</span>
+                    <span class="detail-label">Completed Milestones</span>
+                    <span class="detail-value text-green">2</span>
                   </div>
                 </div>
               </q-card-section>
@@ -351,7 +351,7 @@
                   <th class="text-left">Department</th>
                   <th class="text-left">Progress</th>
                   <th class="text-left">Budget</th>
-                  <th class="text-left">Risk</th>
+                  <th class="text-left">Timeline</th>
                   <th class="text-left">Manager</th>
                 </tr>
               </thead>
