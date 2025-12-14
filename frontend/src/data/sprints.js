@@ -4,96 +4,96 @@ export const sprints = [
   {
     sprintId: 'SPR-001',
     sprintName: 'Sprint 1 - Site Survey & Planning',
-    dateCreated: '2024-02-01',
+    dateCreated: '2025-10-15',
     tasks: ['TASK-001', 'TASK-002', 'TASK-003', 'TASK-004'],
-    startDate: '2024-02-01',
-    endDate: '2024-04-15',
+    startDate: '2025-10-15',
+    endDate: '2025-11-05',
     progressCompletion: 100
   },
   {
     sprintId: 'SPR-002',
     sprintName: 'Sprint 2 - Material Procurement & Installation',
-    dateCreated: '2024-04-10',
+    dateCreated: '2025-11-05',
     tasks: ['TASK-005', 'TASK-006', 'TASK-007', 'TASK-008'],
-    startDate: '2024-04-16',
-    endDate: '2024-08-31',
+    startDate: '2025-11-06',
+    endDate: '2025-11-25',
     progressCompletion: 100
   },
   {
     sprintId: 'SPR-003',
     sprintName: 'Sprint 3 - Testing & Commissioning',
-    dateCreated: '2024-08-25',
+    dateCreated: '2025-11-20',
     tasks: ['TASK-009', 'TASK-010', 'TASK-011'],
-    startDate: '2024-09-01',
-    endDate: '2024-12-31',
-    progressCompletion: 75
+    startDate: '2025-11-26',
+    endDate: '2025-12-10',
+    progressCompletion: 65
   },
 
   // PROJ-002 Sprints
   {
     sprintId: 'SPR-004',
     sprintName: 'Sprint 1 - System Assessment',
-    dateCreated: '2024-01-10',
+    dateCreated: '2025-09-15',
     tasks: ['TASK-012', 'TASK-013', 'TASK-014'],
-    startDate: '2024-01-10',
-    endDate: '2024-03-31',
+    startDate: '2025-09-15',
+    endDate: '2025-10-05',
     progressCompletion: 100
   },
   {
     sprintId: 'SPR-005',
     sprintName: 'Sprint 2 - Hardware Upgrade',
-    dateCreated: '2024-03-25',
+    dateCreated: '2025-10-05',
     tasks: ['TASK-015', 'TASK-016', 'TASK-017'],
-    startDate: '2024-04-01',
-    endDate: '2024-07-31',
+    startDate: '2025-10-06',
+    endDate: '2025-10-28',
     progressCompletion: 100
   },
   {
     sprintId: 'SPR-006',
     sprintName: 'Sprint 3 - Software Implementation',
-    dateCreated: '2024-07-25',
+    dateCreated: '2025-10-28',
     tasks: ['TASK-018', 'TASK-019', 'TASK-020'],
-    startDate: '2024-08-01',
-    endDate: '2024-11-30',
-    progressCompletion: 85
+    startDate: '2025-10-29',
+    endDate: '2025-11-20',
+    progressCompletion: 100
   },
   {
     sprintId: 'SPR-007',
     sprintName: 'Sprint 4 - Security & Testing',
-    dateCreated: '2024-11-25',
+    dateCreated: '2025-11-20',
     tasks: ['TASK-021', 'TASK-022'],
-    startDate: '2024-12-01',
-    endDate: '2025-06-30',
-    progressCompletion: 10
+    startDate: '2025-11-21',
+    endDate: '2025-12-15',
+    progressCompletion: 50
   },
 
   // PROJ-003 Sprints
   {
     sprintId: 'SPR-008',
     sprintName: 'Sprint 1 - Design & Engineering',
-    dateCreated: '2024-04-15',
+    dateCreated: '2025-07-01',
     tasks: ['TASK-023', 'TASK-024', 'TASK-025'],
-    startDate: '2024-04-15',
-    endDate: '2024-08-15',
+    startDate: '2025-07-01',
+    endDate: '2025-08-15',
     progressCompletion: 100
   },
   {
     sprintId: 'SPR-009',
     sprintName: 'Sprint 2 - Construction Phase',
-    dateCreated: '2024-08-10',
+    dateCreated: '2025-08-15',
     tasks: ['TASK-026', 'TASK-027', 'TASK-028'],
-    startDate: '2024-08-16',
-    endDate: '2024-12-31',
-    progressCompletion: 80
+    startDate: '2025-08-16',
+    endDate: '2025-09-30',
+    progressCompletion: 100
   },
   {
     sprintId: 'SPR-010',
     sprintName: 'Sprint 3 - Installation & Commissioning',
-    dateCreated: '2024-12-20',
+    dateCreated: '2025-09-30',
     tasks: ['TASK-029', 'TASK-030'],
-    startDate: '2025-01-01',
-    endDate: '2025-04-15',
-    progressCompletion: 15
+    startDate: '2025-10-01',
+    endDate: '2025-11-15',
+    progressCompletion: 100
   },
 
   // PROJ-004 Sprints (Completed)
@@ -185,57 +185,57 @@ export const sprints = [
   {
     sprintId: 'SPR-020',
     sprintName: 'Sprint 1 - Design & Planning',
-    dateCreated: '2024-03-01',
+    dateCreated: '2025-08-20',
     tasks: ['TASK-120', 'TASK-121', 'TASK-122'],
-    startDate: '2024-03-01',
-    endDate: '2024-03-22',
+    startDate: '2025-08-20',
+    endDate: '2025-09-15',
     progressCompletion: 100
   },
   {
     sprintId: 'SPR-021',
     sprintName: 'Sprint 2 - Equipment Procurement',
-    dateCreated: '2024-03-25',
+    dateCreated: '2025-09-15',
     tasks: ['TASK-123', 'TASK-124', 'TASK-125'],
-    startDate: '2024-03-25',
-    endDate: '2024-04-15',
+    startDate: '2025-09-16',
+    endDate: '2025-10-10',
     progressCompletion: 100
   },
   {
     sprintId: 'SPR-022',
     sprintName: 'Sprint 3 - Installation & Testing',
-    dateCreated: '2024-04-20',
+    dateCreated: '2025-10-10',
     tasks: ['TASK-126', 'TASK-127', 'TASK-128'],
-    startDate: '2024-04-20',
-    endDate: '2024-05-11',
-    progressCompletion: 90
+    startDate: '2025-10-11',
+    endDate: '2025-11-08',
+    progressCompletion: 100
   },
   // Project PROJ-008 Sprints - Underground Cable Installation
   {
     sprintId: 'SPR-023',
     sprintName: 'Sprint 1 - Trenching & Preparation',
-    dateCreated: '2024-06-01',
+    dateCreated: '2025-09-01',
     tasks: ['TASK-129', 'TASK-130', 'TASK-131', 'TASK-132'],
-    startDate: '2024-06-01',
-    endDate: '2024-06-22',
+    startDate: '2025-09-01',
+    endDate: '2025-09-25',
     progressCompletion: 100
   },
   {
     sprintId: 'SPR-024',
     sprintName: 'Sprint 2 - Cable Installation',
-    dateCreated: '2024-06-25',
+    dateCreated: '2025-09-25',
     tasks: ['TASK-133', 'TASK-134', 'TASK-135'],
-    startDate: '2024-06-25',
-    endDate: '2024-07-16',
+    startDate: '2025-09-26',
+    endDate: '2025-10-20',
     progressCompletion: 100
   },
   {
     sprintId: 'SPR-025',
     sprintName: 'Sprint 3 - Testing & Commissioning',
-    dateCreated: '2024-07-20',
+    dateCreated: '2025-10-20',
     tasks: ['TASK-136', 'TASK-137', 'TASK-138'],
-    startDate: '2024-07-20',
-    endDate: '2024-08-10',
-    progressCompletion: 70
+    startDate: '2025-10-21',
+    endDate: '2025-11-18',
+    progressCompletion: 100
   },
   // Project PROJ-009 Sprints - Smart Metering Deployment
   {
@@ -1416,6 +1416,58 @@ export const sprints = [
     startDate: '2024-11-05',
     endDate: '2024-12-15',
     progressCompletion: 70
+  },
+  
+  // Additional recent sprints for high priority projects
+  // PROJ-006 Recent Sprint
+  {
+    sprintId: 'SPR-152',
+    sprintName: 'Sprint 4 - Final Testing',
+    dateCreated: '2025-11-10',
+    tasks: [],
+    startDate: '2025-11-10',
+    endDate: '2025-11-28',
+    progressCompletion: 100
+  },
+  // PROJ-010 Recent Sprint
+  {
+    sprintId: 'SPR-153',
+    sprintName: 'Sprint 2 - Implementation Phase',
+    dateCreated: '2025-11-01',
+    tasks: [],
+    startDate: '2025-11-01',
+    endDate: '2025-11-22',
+    progressCompletion: 100
+  },
+  // PROJ-013 Recent Sprint
+  {
+    sprintId: 'SPR-154',
+    sprintName: 'Sprint 1 - Initial Assessment',
+    dateCreated: '2025-11-15',
+    tasks: [],
+    startDate: '2025-11-15',
+    endDate: '2025-12-02',
+    progressCompletion: 85
+  },
+  // PROJ-017 Recent Sprint
+  {
+    sprintId: 'SPR-155',
+    sprintName: 'Sprint 3 - Deployment',
+    dateCreated: '2025-11-05',
+    tasks: [],
+    startDate: '2025-11-05',
+    endDate: '2025-11-26',
+    progressCompletion: 100
+  },
+  // PROJ-020 Recent Sprint
+  {
+    sprintId: 'SPR-156',
+    sprintName: 'Sprint 2 - Testing Phase',
+    dateCreated: '2025-11-12',
+    tasks: [],
+    startDate: '2025-11-12',
+    endDate: '2025-12-01',
+    progressCompletion: 90
   }
 ]
 

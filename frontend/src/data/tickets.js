@@ -1121,6 +1121,28 @@ export const tickets = [
     status: 'Under Review',
     requestedBy: 'GF-235',
     approvedBy: null
+  },
+  {
+    ticketId: 'TICK-103',
+    ticketName: 'SCADA interface customization',
+    category: 'Other',
+    additionalInformation: 'User interface modifications needed for better operator experience. Customization of control screens and alarm displays.',
+    projectId: 'PROJ-002',
+    dateCreated: '2024-11-25',
+    status: 'Under Review',
+    requestedBy: 'GF-324',
+    approvedBy: null
+  },
+  {
+    ticketId: 'TICK-104',
+    ticketName: 'Relay testing equipment upgrade',
+    category: 'Budget Change',
+    additionalInformation: 'Modern digital relay testing equipment required. Additional GH¢180,000 for advanced testing and calibration tools.',
+    projectId: 'PROJ-007',
+    dateCreated: '2024-11-28',
+    status: 'Under Review',
+    requestedBy: 'GF-312',
+    approvedBy: null
   }
 ]
 

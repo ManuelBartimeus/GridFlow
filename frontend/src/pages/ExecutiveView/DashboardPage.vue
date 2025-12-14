@@ -83,37 +83,37 @@
         <div class="kpi-grid">
           <div class="kpi-card">
             <div class="kpi-label">Total Active Projects</div>
-            <div class="kpi-value">142</div>
+            <div class="kpi-value">{{ activeProjectsCount }}</div>
             <div class="kpi-trend positive">▲ +2%</div>
           </div>
 
           <div class="kpi-card">
             <div class="kpi-label">Behind Schedule</div>
-            <div class="kpi-value">18</div>
+            <div class="kpi-value">{{ behindScheduleCount }}</div>
             <div class="kpi-trend negative">▼ -5%</div>
           </div>
 
           <div class="kpi-card">
-            <div class="kpi-label">Projects At Risk</div>
-            <div class="kpi-value">9</div>
+            <div class="kpi-label">Projects Over Budget</div>
+            <div class="kpi-value">{{ atRiskCount }}</div>
             <div class="kpi-trend positive">▲ +1%</div>
           </div>
 
           <div class="kpi-card">
             <div class="kpi-label">Period Budget</div>
-            <div class="kpi-value">¢4.2M</div>
+            <div class="kpi-value">{{ formatCurrency(periodBudget) }}</div>
             <div class="kpi-trend positive">▲ +8%</div>
           </div>
 
           <div class="kpi-card">
             <div class="kpi-label">Period Expenditure</div>
-            <div class="kpi-value">¢1.8M</div>
+            <div class="kpi-value">{{ formatCurrency(periodExpenditure) }}</div>
             <div class="kpi-trend negative">▼ -3%</div>
           </div>
 
           <div class="kpi-card">
             <div class="kpi-label">Pending Approvals</div>
-            <div class="kpi-value">5</div>
+            <div class="kpi-value">{{ pendingApprovalsCount }}</div>
             <div class="kpi-trend positive">▲ +1</div>
           </div>
         </div>
@@ -132,14 +132,14 @@
                       <div class="legend-dot" style="background: #ef4444;"></div>
                       <div class="legend-content">
                         <div class="legend-title">Not Started</div>
-                        <div class="legend-subtitle">136 Projects</div>
+                        <div class="legend-subtitle">{{ portfolioHealth.notStarted }} Projects</div>
                       </div>
                     </div>
                     <div class="legend-item">
                       <div class="legend-dot" style="background: #f59e0b;"></div>
                       <div class="legend-content">
                         <div class="legend-title">In Progress</div>
-                        <div class="legend-subtitle">42 Projects</div>
+                        <div class="legend-subtitle">{{ portfolioHealth.inProgress }} Projects</div>
                       </div>
                     </div>
                   </div>
@@ -148,19 +148,30 @@
                     <svg viewBox="0 0 200 200" class="donut-chart">
                       <!-- Background circle -->
                       <circle cx="100" cy="100" r="80" fill="none" stroke="#f0f0f0" stroke-width="25"/>
-                      <!-- Red segment (Not Started - 65%) -->
-                      <circle cx="100" cy="100" r="80" fill="none" stroke="#ef4444" stroke-width="25"
-                              stroke-dasharray="325 502" transform="rotate(-90 100 100)" stroke-linecap="round"/>
-                      <!-- Gold segment (In Progress - 20%) -->
-                      <circle cx="100" cy="100" r="80" fill="none" stroke="#f59e0b" stroke-width="25"
-                              stroke-dasharray="100 502" stroke-dashoffset="-325" transform="rotate(-90 100 100)" stroke-linecap="round"/>
-                      <!-- Green segment (Completed - 15%) -->
-                      <circle cx="100" cy="100" r="80" fill="none" stroke="#10b981" stroke-width="25"
-                              stroke-dasharray="75 502" stroke-dashoffset="-425" transform="rotate(-90 100 100)" stroke-linecap="round"/>
+                      <!-- Red segment (Not Started) -->
+                      <circle cx="100" cy="100" r="80" fill="none" stroke="#ef4444" stroke-width="23"
+                              :stroke-dasharray="`${donutSegments.notStarted.length} 502`" 
+                              :stroke-dashoffset="donutSegments.notStarted.offset"
+                              transform="rotate(-90 100 100)"/>
+                      <!-- Gold segment (In Progress) -->
+                      <circle cx="100" cy="100" r="80" fill="none" stroke="#f59e0b" stroke-width="23"
+                              :stroke-dasharray="`${donutSegments.inProgress.length} 502`" 
+                              :stroke-dashoffset="donutSegments.inProgress.offset"
+                              transform="rotate(-90 100 100)"/>
+                      <!-- Green segment (Completed) -->
+                      <circle cx="100" cy="100" r="80" fill="none" stroke="#10b981" stroke-width="23"
+                              :stroke-dasharray="`${donutSegments.completed.length} 502`" 
+                              :stroke-dashoffset="donutSegments.completed.offset"
+                              transform="rotate(-90 100 100)"/>
+                      <!-- Purple segment (Paused) -->
+                      <circle cx="100" cy="100" r="80" fill="none" stroke="#8b5cf6" stroke-width="23"
+                              :stroke-dasharray="`${donutSegments.paused.length} 502`" 
+                              :stroke-dashoffset="donutSegments.paused.offset"
+                              transform="rotate(-90 100 100)"/>
                       <!-- Center text container -->
                       <foreignObject x="0" y="0" width="200" height="200">
                         <div class="donut-center-text">
-                          <div class="donut-number-text">210</div>
+                          <div class="donut-number-text">{{ portfolioHealth.total }}</div>
                           <div class="donut-label-text">Projects</div>
                         </div>
                       </foreignObject>
@@ -172,14 +183,14 @@
                       <div class="legend-dot" style="background: #10b981;"></div>
                       <div class="legend-content">
                         <div class="legend-title">Completed</div>
-                        <div class="legend-subtitle">32 Projects</div>
+                        <div class="legend-subtitle">{{ portfolioHealth.completed }} Projects</div>
                       </div>
                     </div>
                     <div class="legend-item">
                       <div class="legend-dot" style="background: #8b5cf6;"></div>
                       <div class="legend-content">
                         <div class="legend-title">Paused</div>
-                        <div class="legend-subtitle">10 Projects</div>
+                        <div class="legend-subtitle">{{ portfolioHealth.paused }} Projects</div>
                       </div>
                     </div>
                   </div>
@@ -193,7 +204,7 @@
               <q-card-section>
                 <div class="section-title">Milestone Delivery Rate</div>
                 <div class="milestone-rate q-mt-md">
-                  <span class="rate-value">88%</span>
+                  <span class="rate-value">{{ milestoneRate.percentage }}%</span>
                   <span class="rate-trend">▲ +5%</span>
                 </div>
                 <div class="rate-subtitle">{{ timeRangeText }}</div>
@@ -201,11 +212,11 @@
                 <div class="milestone-details">
                   <div class="detail-row">
                     <span class="detail-label">Overdue Milestones</span>
-                    <span class="detail-value">12</span>
+                    <span class="detail-value">{{ milestoneRate.overdueMilestones }}</span>
                   </div>
                   <div class="detail-row">
                     <span class="detail-label">Completed Milestones</span>
-                    <span class="detail-value text-green">2</span>
+                    <span class="detail-value text-green">{{ milestoneRate.completedMilestones }}</span>
                   </div>
                 </div>
               </q-card-section>
@@ -242,12 +253,16 @@
                       </pattern>
                     </defs>
                     
-                    <!-- Y-axis labels -->
-                    <text x="30" y="30" class="axis-label">50</text>
-                    <text x="30" y="80" class="axis-label">40</text>
-                    <text x="30" y="130" class="axis-label">30</text>
-                    <text x="30" y="180" class="axis-label">20</text>
-                    <text x="30" y="230" class="axis-label">10</text>
+                    <!-- Y-axis labels (dynamic) -->
+                    <text 
+                      v-for="label in productivityYAxisLabels.labels" 
+                      :key="label.y"
+                      x="30" 
+                      :y="label.y" 
+                      class="axis-label"
+                    >
+                      {{ label.value }}
+                    </text>
                     
                     <!-- Dynamic bars based on time range -->
                     <template v-for="(bar, index) in productivityData" :key="index">
@@ -301,11 +316,16 @@
                       </linearGradient>
                     </defs>
                     
-                    <!-- Y-axis labels -->
-                    <text x="45" y="45" class="budget-axis-label">¢5M</text>
-                    <text x="45" y="90" class="budget-axis-label">¢4M</text>
-                    <text x="45" y="135" class="budget-axis-label">¢3M</text>
-                    <text x="45" y="180" class="budget-axis-label">¢2M</text>
+                    <!-- Y-axis labels (dynamic) -->
+                    <text 
+                      v-for="label in budgetYAxisLabels.labels" 
+                      :key="label.y"
+                      x="45" 
+                      :y="label.y" 
+                      class="budget-axis-label"
+                    >
+                      {{ label.value }}
+                    </text>
                     
                     <!-- Target line -->
                     <line x1="80" y1="40" x2="760" y2="40" stroke="#d1d5db" stroke-width="2" stroke-dasharray="5,5"/>
@@ -375,13 +395,16 @@
                   <td><span class="dept-text">{{ project.department }}</span></td>
                   <td>
                     <div class="progress-container">
+                      <q-tooltip anchor="top middle" self="bottom middle" :offset="[0, 8]">
+                        {{ project.progress }}% Complete
+                      </q-tooltip>
                       <div class="progress-bar-bg">
                         <div class="progress-bar-fill" :style="{ width: project.progress + '%' }"></div>
                       </div>
                     </div>
                   </td>
                   <td><q-badge :color="project.budgetColor" :label="project.budgetLabel" /></td>
-                  <td><q-badge :color="project.riskColor" :label="project.risk" /></td>
+                  <td><q-badge :color="project.timelineColor" :label="project.timelineLabel" /></td>
                   <td><span class="manager-text">{{ project.manager }}</span></td>
                 </tr>
               </tbody>
@@ -389,57 +412,35 @@
           </q-card-section>
         </q-card>
 
-        <!-- Bottom Three Cards -->
+        <!-- Bottom Two Cards -->
         <div class="row q-col-gutter-md q-mt-md">
-          <div class="col-4">
+          <div class="col-8">
             <q-card flat bordered class="full-height">
               <q-card-section>
-                <div class="section-title q-mb-md">Pending Approvals</div>
-                <div class="approval-list">
-                  <div class="approval-item">
-                    <a href="#" class="approval-link">New Marketing Budget</a>
-                    <div class="approval-status">5 days pending</div>
-                  </div>
-                  <div class="approval-item">
-                    <a href="#" class="approval-link">Project Nebula Scope Change</a>
-                    <div class="approval-status">2 days pending</div>
-                  </div>
-                  <div class="approval-item">
-                    <a href="#" class="approval-link">Vendor Contract #5421</a>
-                    <div class="approval-status">1 day pending</div>
-                  </div>
-                </div>
-              </q-card-section>
-            </q-card>
-          </div>
-
-          <div class="col-4">
-            <q-card flat bordered class="full-height">
-              <q-card-section>
-                <div class="section-title q-mb-md">Escalated Items & Alerts</div>
-                <div class="alert-list">
-                  <div class="alert-item">
-                    <q-icon name="error" color="red" size="20px" class="q-mr-sm" />
-                    <div>
-                      <div class="alert-title">Project Alpha - Budget Overrun</div>
-                      <div class="alert-subtitle">Exceeded by 15%</div>
-                    </div>
-                  </div>
-                  <div class="alert-item">
-                    <q-icon name="schedule" color="orange" size="20px" class="q-mr-sm" />
-                    <div>
-                      <div class="alert-title">Data Migration - Delayed</div>
-                      <div class="alert-subtitle">Timeline expired 3 days ago</div>
-                    </div>
-                  </div>
-                  <div class="alert-item">
-                    <q-icon name="warning" color="amber" size="20px" class="q-mr-sm" />
-                    <div>
-                      <div class="alert-title">SLA Breach: Support Ticket #9812</div>
-                      <div class="alert-subtitle">Response time exceeded</div>
-                    </div>
-                  </div>
-                </div>
+                <div class="section-title q-mb-md">Top Priority Pending Approvals</div>
+                <q-markup-table flat class="approvals-table">
+                  <thead>
+                    <tr>
+                      <th class="text-left">Ticket</th>
+                      <th class="text-left">Project</th>
+                      <th class="text-left">Category</th>
+                      <th class="text-left">Manager</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(approval, idx) in pendingApprovals.slice(0, 5)" :key="idx">
+                      <td><a href="#" class="approval-link">{{ approval.ticketName }}</a></td>
+                      <td><span class="project-text">{{ approval.projectName }}</span></td>
+                      <td><q-badge :label="approval.category" color="blue-grey-6" /></td>
+                      <td><span class="manager-text">{{ approval.manager }}</span></td>
+                    </tr>
+                    <tr v-if="pendingApprovals.length === 0">
+                      <td colspan="4" class="text-center">
+                        <div class="approval-status">No pending approvals</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </q-markup-table>
               </q-card-section>
             </q-card>
           </div>
@@ -472,16 +473,30 @@
 </template>
 
 <script>
+import * as dashboardService from 'src/data/dashboardDataService.js'
+
 export default {
   name: 'DashboardPage',
   data () {
     return {
       search: '',
-      currentDate: new Date(2025, 10, 18), // November 18, 2025
+      currentDate: new Date(2025, 11, 3), // December 3, 2025
       timeRanges: ['30 Days', '90 Days', '6 Months'],
       departments: ['All', 'Finance', 'Engineering', 'Corporate Strategy', 'GRIDTEL'],
       sectionOptions: ['All'],
       unitOptions: ['All'],
+      
+      // Real data from service
+      activeProjectsCount: 0,
+      behindScheduleCount: 0,
+      atRiskCount: 0,
+      periodBudget: 0,
+      periodExpenditure: 0,
+      pendingApprovalsCount: 0,
+      portfolioHealth: { notStarted: 0, inProgress: 0, completed: 0, paused: 0, total: 0 },
+      milestoneRate: { percentage: 0, overdueMilestones: 0, completedMilestones: 0 },
+      topProjects: [],
+      pendingApprovals: [],
       departmentSections: {
         'Finance': ['All', 'Accounting', 'Treasury', 'Budget & Planning', 'Financial Reporting'],
         'Engineering': ['All', 'Power Systems', 'Transmission', 'Distribution', 'Substations'],
@@ -511,16 +526,23 @@ export default {
         department: 'All',
         section: 'All',
         unit: 'All'
-      },
-      projects: [
-        { name: 'Project Phoenix', department: 'Engineering', progress: 76, budgetLabel: 'On Track', budgetColor: 'green', risk: 'Medium', riskColor: 'amber', manager: 'Alex Johnson' },
-        { name: 'Marketing Revamp', department: 'Marketing', progress: 62, budgetLabel: 'At Risk', budgetColor: 'orange', risk: 'Low', riskColor: 'green', manager: 'Sarah Lee' },
-        { name: 'Q4 Platform Upgrade', department: 'IT', progress: 88, budgetLabel: 'On Track', budgetColor: 'green', risk: 'Low', riskColor: 'green', manager: 'Mike Chen' },
-        { name: 'Data Center Migration', department: 'Operations', progress: 24, budgetLabel: 'Over Budget', budgetColor: 'red', risk: 'High', riskColor: 'red', manager: 'David Rodriguez' }
-      ]
+      }
+    }
+  },
+  watch: {
+    'filters.timeRange'() {
+      this.loadDashboardData()
     }
   },
   computed: {
+    timeRangeDays() {
+      const rangeMap = {
+        '30 Days': 30,
+        '90 Days': 90,
+        '6 Months': 180
+      }
+      return rangeMap[this.filters.timeRange] || 30
+    },
     timeRangeText() {
       const rangeMap = {
         '30 Days': 'Past 30 Days',
@@ -528,6 +550,40 @@ export default {
         '6 Months': 'Past 6 Months'
       }
       return rangeMap[this.filters.timeRange] || 'Past 30 Days'
+    },
+    projects() {
+      // Map topProjects from service to the format expected by the table
+      return this.topProjects.map(p => ({
+        name: p.projectName,
+        department: p.department,
+        progress: p.progress,
+        budgetLabel: this.getBudgetLabel(p.budgetHealth),
+        budgetColor: this.getBudgetColor(p.budgetHealth),
+        timelineLabel: this.getTimelineLabel(p.timelineHealth),
+        timelineColor: this.getTimelineColor(p.timelineHealth),
+        manager: p.projectManager
+      }))
+    },
+    donutSegments() {
+      const total = this.portfolioHealth.total || 1
+      const circumference = 2 * Math.PI * 80 // radius is 80
+      
+      const notStartedPercent = (this.portfolioHealth.notStarted / total) * 100
+      const inProgressPercent = (this.portfolioHealth.inProgress / total) * 100
+      const completedPercent = (this.portfolioHealth.completed / total) * 100
+      const pausedPercent = (this.portfolioHealth.paused / total) * 100
+      
+      const notStartedLength = (notStartedPercent / 100) * circumference
+      const inProgressLength = (inProgressPercent / 100) * circumference
+      const completedLength = (completedPercent / 100) * circumference
+      const pausedLength = (pausedPercent / 100) * circumference
+      
+      return {
+        notStarted: { length: notStartedLength, offset: 0 },
+        inProgress: { length: inProgressLength, offset: -notStartedLength },
+        completed: { length: completedLength, offset: -(notStartedLength + inProgressLength) },
+        paused: { length: pausedLength, offset: -(notStartedLength + inProgressLength + completedLength) }
+      }
     },
     monthLabels() {
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -553,141 +609,84 @@ export default {
       
       return labels
     },
-    productivityData() {
-      const currentMonth = this.currentDate.getMonth()
+    productivityYAxisLabels() {
+      // Calculate dynamic Y-axis labels based on actual data
+      const serviceData = dashboardService.getProductivityData(this.filters.timeRange, this.currentDate)
+      const maxCount = Math.max(...serviceData.map(d => d.count), 1)
+      const step = Math.ceil(maxCount / 5)
+      const maxValue = step * 5
       
-      if (this.filters.timeRange === '30 Days') {
-        // Show 4 weeks (weekly data)
-        return [
-          { month: 'Week 1', tasks: 22, y: 110 },
-          { month: 'Week 2', tasks: 28, y: 90 },
-          { month: 'Week 3', tasks: 31, y: 75 },
-          { month: 'Week 4', tasks: 26, y: 100 }
-        ]
-      } else if (this.filters.timeRange === '90 Days') {
-        // Show 6 bi-weekly periods
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        const data = []
+      return {
+        labels: [
+          { y: 30, value: step * 5 },
+          { y: 80, value: step * 4 },
+          { y: 130, value: step * 3 },
+          { y: 180, value: step * 2 },
+          { y: 230, value: step * 1 }
+        ],
+        maxValue: maxValue
+      }
+    },
+    productivityData() {
+      // Get real productivity data from service
+      const serviceData = dashboardService.getProductivityData(this.filters.timeRange, this.currentDate)
+      const maxValue = this.productivityYAxisLabels.maxValue
+      
+      // Transform service data to chart format with exact scaling
+      return serviceData.map((item) => {
+        const maxY = 230
+        const minY = 30
+        // Scale based on the Y-axis max value for exact alignment
+        const y = maxY - ((item.count / maxValue) * (maxY - minY))
         
-        // Generate 6 data points spanning 3 months
-        for (let i = 5; i >= 0; i--) {
-          const weeksAgo = i * 2
-          const daysAgo = weeksAgo * 7
-          const targetDate = new Date(this.currentDate)
-          targetDate.setDate(targetDate.getDate() - daysAgo)
-          
-          const monthName = months[targetDate.getMonth()]
-          const weekOfMonth = Math.ceil(targetDate.getDate() / 7)
-          
-          // Generate varied task data
-          const tasks = 24 + Math.floor(Math.random() * 16) + (i % 2 === 0 ? 3 : 0)
-          const y = 230 - (tasks * 4)
-          
-          data.push({
-            month: `${monthName} W${weekOfMonth}`,
-            tasks: tasks,
-            y: y
-          })
+        return {
+          month: item.period,
+          tasks: item.count,
+          y: y
         }
-        
-        return data
-      } else {
-        // 6 Months - show monthly data
-        const baseData = [
-          { month: 'Jan', tasks: 30, y: 80 },
-          { month: 'Feb', tasks: 34, y: 60 },
-          { month: 'Mar', tasks: 26, y: 100 },
-          { month: 'Apr', tasks: 32, y: 70 },
-          { month: 'May', tasks: 28, y: 90 },
-          { month: 'Jun', tasks: 24, y: 110 },
-          { month: 'Jul', tasks: 42, y: 20 },
-          { month: 'Aug', tasks: 29, y: 85 },
-          { month: 'Sep', tasks: 27, y: 95 },
-          { month: 'Oct', tasks: 31, y: 75 },
-          { month: 'Nov', tasks: 38, y: 50 },
-          { month: 'Dec', tasks: 33, y: 65 }
-        ]
-        
-        return [
-          baseData[(currentMonth - 5 + 12) % 12],
-          baseData[(currentMonth - 4 + 12) % 12],
-          baseData[(currentMonth - 3 + 12) % 12],
-          baseData[(currentMonth - 2 + 12) % 12],
-          baseData[(currentMonth - 1 + 12) % 12],
-          baseData[currentMonth]
-        ]
+      })
+    },
+    budgetYAxisLabels() {
+      // Calculate dynamic Y-axis labels based on actual data
+      const serviceData = dashboardService.getBudgetUtilizationData(this.filters.timeRange, this.currentDate)
+      const maxValue = Math.max(...serviceData.map(d => Math.max(d.budget, d.expenditure)), 1)
+      const step = maxValue / 4
+      const maxAxisValue = step * 4
+      
+      return {
+        labels: [
+          { y: 45, value: this.formatCurrency(step * 4) },
+          { y: 90, value: this.formatCurrency(step * 3) },
+          { y: 135, value: this.formatCurrency(step * 2) },
+          { y: 180, value: this.formatCurrency(step * 1) }
+        ],
+        maxValue: maxAxisValue
       }
     },
     budgetData() {
-      const currentMonth = this.currentDate.getMonth()
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-      let data = []
+      // Get real budget utilization data from service
+      const serviceData = dashboardService.getBudgetUtilizationData(this.filters.timeRange, this.currentDate)
+      const maxValue = this.budgetYAxisLabels.maxValue
       
-      if (this.filters.timeRange === '30 Days') {
-        // Show 4 weekly data points
-        const baseValue = 2.8
-        data = [
-          { month: 'Week 1', value: `¢${(baseValue + 0.1).toFixed(1)}M`, y: 135 },
-          { month: 'Week 2', value: `¢${(baseValue + 0.3).toFixed(1)}M`, y: 120 },
-          { month: 'Week 3', value: `¢${(baseValue + 0.5).toFixed(1)}M`, y: 105 },
-          { month: 'Week 4', value: `¢${(baseValue + 0.7).toFixed(1)}M`, y: 95 }
-        ]
-      } else if (this.filters.timeRange === '90 Days') {
-        // Show 6 bi-weekly periods
-        for (let i = 5; i >= 0; i--) {
-          const weeksAgo = i * 2
-          const daysAgo = weeksAgo * 7
-          const targetDate = new Date(this.currentDate)
-          targetDate.setDate(targetDate.getDate() - daysAgo)
-          
-          const monthName = months[targetDate.getMonth()]
-          const weekOfMonth = Math.ceil(targetDate.getDate() / 7)
-          
-          // Generate progressive budget values
-          const baseValue = 2.5
-          const increment = (5 - i) * 0.15
-          const value = baseValue + increment
-          const y = 140 - (increment * 30)
-          
-          data.push({
-            month: `${monthName} W${weekOfMonth}`,
-            value: `¢${value.toFixed(1)}M`,
-            y: Math.max(75, Math.min(140, y))
-          })
-        }
-      } else {
-        // 6 Months - show monthly data
-        const baseData = [
-          { month: 'Jan', value: '¢2.1M', y: 140 },
-          { month: 'Feb', value: '¢2.5M', y: 120 },
-          { month: 'Mar', value: '¢2.7M', y: 115 },
-          { month: 'Apr', value: '¢3.2M', y: 95 },
-          { month: 'May', value: '¢2.9M', y: 110 },
-          { month: 'Jun', value: '¢3.1M', y: 105 },
-          { month: 'Jul', value: '¢2.7M', y: 115 },
-          { month: 'Aug', value: '¢3.0M', y: 108 },
-          { month: 'Sep', value: '¢3.3M', y: 92 },
-          { month: 'Oct', value: '¢3.5M', y: 85 },
-          { month: 'Nov', value: '¢3.8M', y: 75 },
-          { month: 'Dec', value: '¢4.0M', y: 65 }
-        ]
+      // Transform service data to chart format with exact scaling
+      const maxY = 180
+      const minY = 45
+      const spacing = 680 / Math.max(serviceData.length - 1, 1)
+      
+      return serviceData.map((item, index) => {
+        // Scale based on the Y-axis max value for exact alignment
+        const y = maxY - ((item.expenditure / maxValue) * (maxY - minY))
+        const budgetFormatted = this.formatCurrency(item.expenditure)
         
-        data = [
-          baseData[(currentMonth - 5 + 12) % 12],
-          baseData[(currentMonth - 4 + 12) % 12],
-          baseData[(currentMonth - 3 + 12) % 12],
-          baseData[(currentMonth - 2 + 12) % 12],
-          baseData[(currentMonth - 1 + 12) % 12],
-          baseData[currentMonth]
-        ]
-      }
-      
-      // Recalculate cx positions based on number of points
-      const spacing = 680 / Math.max(data.length - 1, 1)
-      return data.map((item, index) => ({
-        ...item,
-        cx: 80 + (index * spacing)
-      }))
+        return {
+          month: item.period,
+          value: budgetFormatted,
+          y: y,
+          cx: 80 + (index * spacing),
+          budget: item.budget,
+          expenditure: item.expenditure
+        }
+      })
     },
     budgetPath() {
       const points = this.budgetData.map(d => `${d.cx},${d.y}`).join(' L ')
@@ -695,6 +694,81 @@ export default {
     }
   },
   methods: {
+    loadDashboardData() {
+      const timeRange = this.filters.timeRange
+      
+      // Load all dashboard metrics
+      this.activeProjectsCount = dashboardService.getTotalActiveProjects()
+      this.behindScheduleCount = dashboardService.getBehindScheduleCount()
+      this.atRiskCount = dashboardService.getProjectsAtRiskCount()
+      this.periodBudget = dashboardService.getPeriodBudget(timeRange)
+      this.periodExpenditure = dashboardService.getPeriodExpenditure(timeRange)
+      this.pendingApprovalsCount = dashboardService.getPendingApprovalsCount()
+      
+      // Load portfolio health breakdown
+      const healthData = dashboardService.getPortfolioHealth()
+      this.portfolioHealth = {
+        notStarted: healthData['not started'] || 0,
+        inProgress: healthData['in progress'] || 0,
+        completed: healthData.completed || 0,
+        paused: healthData.paused || 0,
+        total: (healthData['not started'] || 0) + (healthData['in progress'] || 0) + (healthData.completed || 0) + (healthData.paused || 0)
+      }
+      
+      // Load milestone delivery rate
+      const milestoneData = dashboardService.getMilestoneDeliveryRate(timeRange)
+      this.milestoneRate = {
+        percentage: milestoneData.rate || 0,
+        overdueMilestones: milestoneData.overdue || 0,
+        completedMilestones: milestoneData.completed || 0
+      }
+      
+      // Load top priority projects
+      this.topProjects = dashboardService.getTopPriorityProjects()
+      
+      // Load pending approvals for top projects
+      const approvals = dashboardService.getPendingApprovalsForTopProjects()
+      this.pendingApprovals = approvals.map(a => ({
+        ...a,
+        daysAgo: a.daysSince
+      }))
+    },
+    formatCurrency(value) {
+      if (value >= 1000000) {
+        return `¢${(value / 1000000).toFixed(1)}M`
+      } else if (value >= 1000) {
+        return `¢${(value / 1000).toFixed(1)}K`
+      }
+      return `¢${value}`
+    },
+    getBudgetLabel(budgetHealth) {
+      const healthMap = {
+        'on track': 'On Track',
+        'over budget': 'Over Budget'
+      }
+      return healthMap[budgetHealth?.toLowerCase()] || 'Unknown'
+    },
+    getBudgetColor(budgetHealth) {
+      const colorMap = {
+        'on track': 'green',
+        'over budget': 'red'
+      }
+      return colorMap[budgetHealth?.toLowerCase()] || 'grey'
+    },
+    getTimelineLabel(timelineHealth) {
+      const healthMap = {
+        'on track': 'On Track',
+        'behind schedule': 'Behind Schedule'
+      }
+      return healthMap[timelineHealth?.toLowerCase()] || 'Unknown'
+    },
+    getTimelineColor(timelineHealth) {
+      const colorMap = {
+        'on track': 'green',
+        'behind schedule': 'red'
+      }
+      return colorMap[timelineHealth?.toLowerCase()] || 'grey'
+    },
     applyFilters () {
       // This demo UI simply simulates filter action
       this.$q.notify({ type: 'positive', message: 'Filters applied' })
@@ -733,41 +807,78 @@ export default {
     }
   },
   mounted () {
-    // Add hover interaction for budget chart points
+    // Load dashboard data
+    this.loadDashboardData()
+    
+    // Add hover and click interaction for budget chart points
     const points = document.querySelectorAll('.budget-point')
     const tooltip = document.querySelector('.budget-tooltip')
     const tooltipMonth = document.querySelector('.tooltip-month')
     const tooltipValue = document.querySelector('.tooltip-value')
     const tooltipRect = tooltip?.querySelector('rect')
+    let tooltipPinned = false
+    
+    const showTooltip = (e) => {
+      const month = e.target.getAttribute('data-month')
+      const value = e.target.getAttribute('data-value')
+      const cx = parseFloat(e.target.getAttribute('cx'))
+      const cy = parseFloat(e.target.getAttribute('cy'))
+      
+      if (tooltipMonth && tooltipValue && tooltip && tooltipRect) {
+        tooltipMonth.textContent = month
+        tooltipValue.textContent = value
+        
+        // Position tooltip above the point
+        tooltipRect.setAttribute('x', cx - 40)
+        tooltipRect.setAttribute('y', cy - 50)
+        tooltipMonth.setAttribute('x', cx)
+        tooltipMonth.setAttribute('y', cy - 35)
+        tooltipValue.setAttribute('x', cx)
+        tooltipValue.setAttribute('y', cy - 22)
+        
+        tooltip.style.opacity = '1'
+        tooltip.setAttribute('data-visible', 'true')
+      }
+    }
+    
+    const hideTooltip = () => {
+      if (tooltip && !tooltipPinned) {
+        tooltip.style.opacity = '0'
+        tooltip.setAttribute('data-visible', 'false')
+      }
+    }
     
     points.forEach(point => {
-      point.addEventListener('mouseenter', (e) => {
-        const month = e.target.getAttribute('data-month')
-        const value = e.target.getAttribute('data-value')
-        const cx = parseFloat(e.target.getAttribute('cx'))
-        const cy = parseFloat(e.target.getAttribute('cy'))
+      // Hover interactions
+      point.addEventListener('mouseenter', showTooltip)
+      point.addEventListener('mouseleave', hideTooltip)
+      
+      // Click interaction - toggle tooltip pin
+      point.addEventListener('click', (e) => {
+        e.stopPropagation()
+        tooltipPinned = !tooltipPinned
         
-        if (tooltipMonth && tooltipValue && tooltip && tooltipRect) {
-          tooltipMonth.textContent = month
-          tooltipValue.textContent = value
-          
-          // Position tooltip above the point
-          tooltipRect.setAttribute('x', cx - 40)
-          tooltipRect.setAttribute('y', cy - 50)
-          tooltipMonth.setAttribute('x', cx)
-          tooltipMonth.setAttribute('y', cy - 35)
-          tooltipValue.setAttribute('x', cx)
-          tooltipValue.setAttribute('y', cy - 22)
-          
-          tooltip.style.opacity = '1'
+        if (tooltipPinned) {
+          showTooltip(e)
+          // Add pointer cursor to indicate it's pinned
+          point.style.cursor = 'pointer'
+        } else {
+          hideTooltip()
+          point.style.cursor = 'pointer'
         }
       })
       
-      point.addEventListener('mouseleave', () => {
-        if (tooltip) {
-          tooltip.style.opacity = '0'
-        }
-      })
+      // Set cursor style
+      point.style.cursor = 'pointer'
+    })
+    
+    // Click anywhere else to unpin tooltip
+    document.addEventListener('click', () => {
+      if (tooltipPinned && tooltip) {
+        tooltipPinned = false
+        tooltip.style.opacity = '0'
+        tooltip.setAttribute('data-visible', 'false')
+      }
     })
   }
 }
@@ -1105,17 +1216,28 @@ export default {
   stroke: white;
   stroke-width: 2;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .budget-point:hover {
-  r: 7;
   fill: #059669;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.6));
+}
+
+.budget-point:active {
+  fill: #047857;
+  transform: scale(1.1);
 }
 
 .budget-tooltip {
   pointer-events: none;
   transition: opacity 0.3s ease;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+}
+
+.budget-tooltip[data-visible="true"] {
+  pointer-events: auto;
 }
 
 /* Projects Table */
@@ -1274,22 +1396,32 @@ export default {
 }
 
 /* Bottom Cards */
-.approval-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.approvals-table {
+  background: transparent;
+  border-radius: 12px;
 }
 
-.approval-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.approvals-table thead th {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  padding: 12px 16px;
+  background: #f9fafb;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.approvals-table tbody td {
+  padding: 16px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .approval-link {
   color: #3b82f6;
   text-decoration: none;
   font-size: 14px;
+  font-weight: 500;
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -1297,10 +1429,17 @@ export default {
   text-decoration: underline;
 }
 
+.project-text {
+  color: #3b82f6;
+  font-size: 13px;
+  font-family: 'Montserrat', sans-serif;
+}
+
 .approval-status {
   font-size: 13px;
-  color: #f59e0b;
+  color: #6b7280;
   font-family: 'Montserrat', sans-serif;
+  padding: 20px;
 }
 
 .alert-list {
