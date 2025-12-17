@@ -570,6 +570,239 @@ export function getUserNameById(userId) {
   return userId
 }
 
+// ============================================
+// DEPARTMENT/SECTION/UNIT SCOPED FUNCTIONS
+// ============================================
+
+/**
+ * Filter projects by organizational scope
+ * @param {string} scopeType - 'department', 'section', or 'unit'
+ * @param {string} scopeValue - The value to filter by
+ */
+function filterProjectsByScope(scopeType, scopeValue) {
+  if (!scopeValue || scopeValue === 'All') return projects
+  
+  return projects.filter(p => {
+    if (scopeType === 'department') return p.department === scopeValue
+    if (scopeType === 'section') return p.section === scopeValue
+    if (scopeType === 'unit') return p.unit === scopeValue
+    return true
+  })
+}
+
+/**
+ * Get total active projects for a specific scope
+ */
+export function getTotalActiveProjectsScoped(scopeType, scopeValue) {
+  const filtered = filterProjectsByScope(scopeType, scopeValue)
+  return filtered.filter(p => p.currentStatus !== 'paused').length
+}
+
+/**
+ * Get count of projects behind schedule for a specific scope
+ */
+export function getBehindScheduleCountScoped(scopeType, scopeValue) {
+  const filtered = filterProjectsByScope(scopeType, scopeValue)
+  return filtered.filter(p => p.timelineHealth === 'behind schedule').length
+}
+
+/**
+ * Get count of projects over budget for a specific scope
+ */
+export function getProjectsOverBudgetCountScoped(scopeType, scopeValue) {
+  const filtered = filterProjectsByScope(scopeType, scopeValue)
+  return filtered.filter(p => p.budgetHealth === 'over budget').length
+}
+
+/**
+ * Get period budget for projects in a specific scope
+ */
+export function getPeriodBudgetScoped(timeRange, scopeType, scopeValue, currentDate = new Date()) {
+  const startDate = getFilterStartDate(timeRange, currentDate)
+  const filtered = filterProjectsByScope(scopeType, scopeValue)
+  
+  return filtered
+    .filter(p => isDateInRange(p.issueDate, startDate, currentDate))
+    .reduce((sum, p) => sum + (p.allocatedBudget || 0), 0)
+}
+
+/**
+ * Get period expenditure for projects in a specific scope
+ */
+export function getPeriodExpenditureScoped(timeRange, scopeType, scopeValue, currentDate = new Date()) {
+  const startDate = getFilterStartDate(timeRange, currentDate)
+  const filtered = filterProjectsByScope(scopeType, scopeValue)
+  
+  return filtered
+    .filter(p => isDateInRange(p.issueDate, startDate, currentDate))
+    .reduce((sum, p) => sum + (p.expenditure || 0), 0)
+}
+
+/**
+ * Get pending approvals count for a specific scope
+ */
+export function getPendingApprovalsCountScoped(scopeType, scopeValue) {
+  const filtered = filterProjectsByScope(scopeType, scopeValue)
+  const projectIds = filtered.map(p => p.projectId)
+  
+  return tickets.filter(t => 
+    t.status === 'Under Review' && projectIds.includes(t.projectId)
+  ).length
+}
+
+/**
+ * Get portfolio health breakdown for a specific scope
+ */
+export function getPortfolioHealthScoped(scopeType, scopeValue) {
+  const filtered = filterProjectsByScope(scopeType, scopeValue)
+  
+  return filtered.reduce((acc, project) => {
+    const status = project.currentStatus || 'not started'
+    acc[status] = (acc[status] || 0) + 1
+    return acc
+  }, {})
+}
+
+/**
+ * Get milestone delivery rate for projects in a specific scope
+ */
+export function getMilestoneDeliveryRateScoped(timeRange, scopeType, scopeValue, currentDate = new Date()) {
+  const filtered = filterProjectsByScope(scopeType, scopeValue)
+  const projectIds = filtered.map(p => p.projectId)
+  
+  const dueSprintsList = getSprintsDueInRange(timeRange, currentDate)
+  const scopedSprints = dueSprintsList.filter(sprint => {
+    // Find which project this sprint belongs to
+    const project = projects.find(p => p.sprints && p.sprints.includes(sprint.sprintId))
+    return project && projectIds.includes(project.projectId)
+  })
+  
+  if (scopedSprints.length === 0) {
+    return { rate: 0, completed: 0, overdue: 0, total: 0 }
+  }
+  
+  const completedSprintsList = scopedSprints.filter(sprint => isSprintCompleted(sprint))
+  const completed = completedSprintsList.length
+  const total = scopedSprints.length
+  const overdue = total - completed
+  const rate = Math.round((completed / total) * 100)
+  
+  return { rate, completed, overdue, total }
+}
+
+/**
+ * Get productivity data for projects in a specific scope
+ */
+export function getProductivityDataScoped(timeRange, scopeType, scopeValue, currentDate = new Date()) {
+  const filtered = filterProjectsByScope(scopeType, scopeValue)
+  const projectIds = filtered.map(p => p.projectId)
+  
+  const allData = getProductivityData(timeRange, currentDate)
+  
+  // Filter tasks by project scope
+  return allData.map(period => {
+    const scopedTasks = tasks.filter(t => projectIds.includes(t.projectId))
+    const startDate = parseDate(period.startDate)
+    const endDate = parseDate(period.endDate)
+    
+    const periodTasks = scopedTasks.filter(t => {
+      const taskDate = parseDate(t.dateCreated)
+      return taskDate && taskDate >= startDate && taskDate <= endDate
+    })
+    
+    const completedTasks = periodTasks.filter(t => t.status === 'completed').length
+    const totalTasks = periodTasks.length
+    const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
+    
+    return {
+      ...period,
+      tasks: totalTasks,
+      completionRate
+    }
+  })
+}
+
+/**
+ * Get budget utilization data for projects in a specific scope
+ */
+export function getBudgetUtilizationDataScoped(timeRange, scopeType, scopeValue, currentDate = new Date()) {
+  const filtered = filterProjectsByScope(scopeType, scopeValue)
+  
+  const allData = getBudgetUtilizationData(timeRange, currentDate)
+  
+  return allData.map(period => {
+    const startDate = parseDate(period.startDate)
+    const endDate = parseDate(period.endDate)
+    
+    const periodProjects = filtered.filter(p => {
+      const issueDate = parseDate(p.issueDate)
+      return issueDate && issueDate >= startDate && issueDate <= endDate
+    })
+    
+    const budget = periodProjects.reduce((sum, p) => sum + (p.allocatedBudget || 0), 0)
+    const expenditure = periodProjects.reduce((sum, p) => sum + (p.expenditure || 0), 0)
+    
+    return {
+      ...period,
+      budget,
+      expenditure
+    }
+  })
+}
+
+/**
+ * Get top priority projects for a specific scope
+ */
+export function getTopPriorityProjectsScoped(scopeType, scopeValue, limit = 10) {
+  const filtered = filterProjectsByScope(scopeType, scopeValue)
+  
+  return filtered
+    .filter(p => p.priority === 'high priority')
+    .slice(0, limit)
+    .map(p => {
+      const manager = users.find(u => u.name === p.projectManager)
+      return {
+        name: p.projectName,
+        department: p.department,
+        progress: p.progressCompletion || 0,
+        budgetHealth: p.budgetHealth,
+        budgetLabel: p.budgetHealth === 'on track' ? 'On Track' : 'Over Budget',
+        budgetColor: p.budgetHealth === 'on track' ? 'green' : 'red',
+        timelineHealth: p.timelineHealth,
+        timelineLabel: p.timelineHealth === 'on track' ? 'On Track' : 'Behind Schedule',
+        timelineColor: p.timelineHealth === 'on track' ? 'green' : 'red',
+        manager: manager ? manager.name : p.projectManager
+      }
+    })
+}
+
+/**
+ * Get pending approvals for top projects in a specific scope
+ */
+export function getPendingApprovalsForTopProjectsScoped(scopeType, scopeValue) {
+  const filtered = filterProjectsByScope(scopeType, scopeValue)
+  const highPriorityProjectIds = filtered
+    .filter(p => p.priority === 'high priority')
+    .map(p => p.projectId)
+  
+  return tickets
+    .filter(t => t.status === 'Under Review' && highPriorityProjectIds.includes(t.projectId))
+    .map(ticket => {
+      const project = filtered.find(p => p.projectId === ticket.projectId)
+      const manager = project ? users.find(u => u.name === project.projectManager) : null
+      
+      return {
+        ticketId: ticket.ticketId,
+        ticketName: ticket.ticketName,
+        projectId: ticket.projectId,
+        projectName: project ? project.projectName : 'Unknown',
+        category: ticket.category,
+        manager: manager ? manager.name : (project ? project.projectManager : 'Unknown'),
+        dateCreated: ticket.dateCreated
+      }
+    })
+}
+
 export default {
   getTotalActiveProjects,
   getBehindScheduleCount,
@@ -585,5 +818,18 @@ export default {
   getPendingApprovalsForTopProjects,
   formatLargeNumber,
   formatCurrency,
-  getUserNameById
+  getUserNameById,
+  // Scoped functions
+  getTotalActiveProjectsScoped,
+  getBehindScheduleCountScoped,
+  getProjectsOverBudgetCountScoped,
+  getPeriodBudgetScoped,
+  getPeriodExpenditureScoped,
+  getPendingApprovalsCountScoped,
+  getPortfolioHealthScoped,
+  getMilestoneDeliveryRateScoped,
+  getProductivityDataScoped,
+  getBudgetUtilizationDataScoped,
+  getTopPriorityProjectsScoped,
+  getPendingApprovalsForTopProjectsScoped
 }
